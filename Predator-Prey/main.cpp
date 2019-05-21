@@ -1,10 +1,18 @@
 #include <iostream>
 #include "Interfaces/ILattice.h"
 #include "Lattice.h"
-
+#include "Logger.h"
+#include "Environment.h"
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
+	auto env = Environment(6);
+	env.showLattice();
+	env.nextStep();
+	std::cout << "Hello world " << std::endl;
+	Logger::getInstance().Log("test", "Przyklad loggera");
+	Logger::getInstance().Log("test", "Tak go uzywac");
+	Logger::getInstance().Log("inny_log", "Pliki sa tworzone i dopisywane na koncu");
 
 	std::shared_ptr<ILattice> lattice(new Lattice(5));
 	const std::pair<int, int> position(3, 4);
