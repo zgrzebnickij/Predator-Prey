@@ -2,9 +2,7 @@
 #include "Environment.h"
 #include "Prey.h"
 #include "Predator.h"
-#include "boost/multi_array.hpp"
 #include <cassert>
-<<<<<<< HEAD
 #include "boost\shared_ptr.hpp"
 #include "BoundaryCondition.h"
 //TODO change that for RandomDevice class
@@ -38,49 +36,24 @@ Environment::Environment(int latteSize_, bool blindAgents_):
 	}
 	// Assign values to the elements
 	
-=======
-
-
-Environment::Environment(const int latteSize)
-{
-	latticeSize = latteSize;
-	lattice =  new int*[latticeSize];
-	for (int i = 0; i < latticeSize; i++) {
-		lattice[i] = new int[latticeSize];
-	}
-	// Assign values to the elements
-	int values = 1;
-	for (int i = 0; i < latticeSize; ++i) {
-		for (int j = 0; j < latticeSize; ++j) {
-			if ((i + j) % 4 == 0) {
-				lattice[i][j] = values;
-				values++;
-			}
-			else {
-				lattice[i][j] = 0;
-			}
-		}
-	}
->>>>>>> [WIP] add environment and Predator class
 	for (int i = 0; i < values; i++) {
 		if (i % 2) {
-			agents.insert(i + 1, new Predator(i + 1, 30));
+			agents.push_back(std::shared_ptr<Agent>(new Predator(i + 1, 30)));
 		}
 		else {
-			agents.insert(i + 1, new Prey(i + 1));
+			agents.push_back(std::shared_ptr<Agent>(new Prey(i + 1)));
 		}
 	}
 
 }
 
-<<<<<<< HEAD
+
 void Environment::printAgents() {
 	for (int i = 0; i < agents.size(); i++) {
 		std::cout << "Index: " << i << " " << agents[i]->getTypeOfAgent() << " " << agents[i]->getHealth() << std::endl;
 	}
 }
-=======
->>>>>>> [WIP] add environment and Predator class
+
 
 
 Environment::~Environment()
@@ -89,7 +62,7 @@ Environment::~Environment()
 
 
 void Environment::nextStep() {
-<<<<<<< HEAD
+
 	//TODO 
 	for (int i=0; i < 10; i++) {
 		const int row = (rand() % latticeSize);
@@ -153,12 +126,6 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
 
 
 
-=======
-
-}
-
-
->>>>>>> [WIP] add environment and Predator class
 void Environment::showLattice() {
 	for (int i = 0; i < latticeSize; ++i) {
 		for (int j = 0; j < latticeSize; ++j) {
