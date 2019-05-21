@@ -18,11 +18,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Prey.cpp">
     <ClCompile Include="Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Agent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Prey.h">
     <ClInclude Include="Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
