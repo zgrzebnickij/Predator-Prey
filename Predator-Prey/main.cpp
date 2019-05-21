@@ -1,6 +1,7 @@
 #include <iostream>
+#include "Prey.h"
 
 int main() {
 	std::cout << "Hello world" << std::endl;
-	system("pause");
+	auto prey = Prey();
 }
