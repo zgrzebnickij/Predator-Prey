@@ -15,6 +15,6 @@ public:
 	Logger(Logger const&) = delete;
 	void operator=(Logger const&) = delete;
 
-	void Log(const std::string& fileName, const char * format, ...);
+	void Log(const std::string& fileName, const char * message, ...);
 };
 
