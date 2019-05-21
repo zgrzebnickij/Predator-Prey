@@ -140,7 +140,6 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Interfaces\ILattice.h" />
     <ClInclude Include="Lattice.h" />
-    <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Predator.h" />
     <ClInclude Include="Prey.h" />
