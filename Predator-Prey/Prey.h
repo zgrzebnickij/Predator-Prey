@@ -4,5 +4,6 @@
 class Prey : public Agent
 {
 public:
-	void updateHealth() override;
+	Prey(const int ID);
+	void updateHealth() override;	
 };

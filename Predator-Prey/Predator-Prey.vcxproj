@@ -118,12 +118,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Predator.cpp" />
     <ClCompile Include="Prey.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="Environment.h" />
+    <ClInclude Include="Predator.h" />
     <ClInclude Include="Prey.h" />
   </ItemGroup>
   <ItemGroup>
