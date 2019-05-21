@@ -1,6 +1,6 @@
 #pragma once
 #include "Agent.h"
-#include "boost\multi_array.hpp"
+#include <vector>
 
 class Environment
 {
@@ -12,7 +12,7 @@ public:
 private:
 	int latticeSize;
 	//TODO: Change it for class lattice
-	std::vector<Agent*> agents;
+	std::vector<std::shared_ptr<Agent>> agents;
 	int **lattice;
 };
 
