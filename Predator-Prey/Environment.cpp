@@ -2,7 +2,6 @@
 #include "Environment.h"
 #include "Prey.h"
 #include "Predator.h"
-#include "boost/multi_array.hpp"
 #include <cassert>
 
 
@@ -28,10 +27,10 @@ Environment::Environment(const int latteSize)
 	}
 	for (int i = 0; i < values; i++) {
 		if (i % 2) {
-			agents.insert(i + 1, new Predator(i + 1, 30));
+			agents.push_back(std::shared_ptr<Agent>(new Predator(i + 1, 30)));
 		}
 		else {
-			agents.insert(i + 1, new Prey(i + 1));
+			agents.push_back(std::shared_ptr<Agent>(new Prey(i + 1)));
 		}
 	}
 
