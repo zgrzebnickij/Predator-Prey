@@ -19,6 +19,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Prey.cpp">
+    <ClCompile Include="Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,6 +28,10 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Prey.h">
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
