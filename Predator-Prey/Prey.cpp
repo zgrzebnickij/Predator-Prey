@@ -2,16 +2,7 @@
 
 
 
-Prey::Prey()
-{
-}
-
-
-Prey::~Prey()
-{
-}
-
-
 void Prey::updateHealth() {
-	addHealth(-1);
+	//TODO: Avoid magic numbers. Extract to constants
+	changeHealth(-1);
 }

@@ -1,17 +1,20 @@
 #pragma once
+#include <utility>
+
 class Agent
 {
 public:
-	Agent();
-	virtual ~Agent();
-	inline void setHealth(int healthToSet) { health = healthToSet; }
-	inline int getHealth() { return health; }
+	Agent() : health(0), visionDistance(0), visionAngle(180) {}
+	virtual ~Agent() = default;
+	void setHealth(const int healthToSet) { health = healthToSet; }
+	int getHealth() const { return health; }
 	virtual void updateHealth() = 0;
-	inline void addHealth(int healthToAdd) { health += healthToAdd; }
+	void changeHealth(const int healthToAdd) { health += healthToAdd; }
+
 private:
 	int health;
-	float visionDistance;
+	double visionDistance;
 	int visionAngle;
-	int *heading;
+	std::pair<int, int> heading;
 };
 
