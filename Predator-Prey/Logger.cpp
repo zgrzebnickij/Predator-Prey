@@ -9,7 +9,7 @@ void Logger::Log(const std::string& fileName, const char * message, ...)
 	namespace fs = std::experimental::filesystem;
 	std::ofstream logFile;
 	const std::string logDirectory = "Logs/";
-	std::string completeFileName = logDirectory + fileName + ".log";
+	const std::string completeFileName = logDirectory + fileName + ".log";
 
 	const fs::path pathToLogs(logDirectory);
 	if(!exists(pathToLogs)) {
@@ -25,7 +25,7 @@ void Logger::Log(const std::string& fileName, const char * message, ...)
 		nLength = _vscprintf(message, args) + 1;
 		sMessage = new char[nLength];
 		vsprintf_s(sMessage, nLength, message, args);
-		logFile << Util::CurrentDateTime() << ":\t";
+		logFile << Utils::CurrentDateTime() << ":\t";
 		logFile << sMessage << "\n";
 		va_end(args);
 		delete[] sMessage;

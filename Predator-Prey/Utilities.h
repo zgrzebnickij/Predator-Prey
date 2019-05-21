@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/assign/list_of.hpp>
+#include <boost/unordered_map.hpp>
+#include "Enums.h"
 
-namespace Util
+namespace Utils
 {
 	inline std::string CurrentDateTime()
 	{
@@ -10,4 +13,9 @@ namespace Util
 		std::string currentTimeStr = to_simple_string(currentTime);
 		return currentTimeStr;
 	}
+
+	inline boost::unordered_map<Enums::AgentType, const char*> AgentTypeToString = boost::assign::map_list_of
+		(Enums::AgentType::Grass, "Grass")
+		(Enums::AgentType::Prey, "Prey")
+		(Enums::AgentType::Predator, "Predator");
 }
