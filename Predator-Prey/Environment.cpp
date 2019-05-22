@@ -47,6 +47,11 @@ Environment::Environment(int latteSize_, bool blindAgents_):
 
 }
 
+void Environment::printAgents() {
+	for (int i = 0; i < agents.size(); i++) {
+		std::cout << "Index: " << i << " " << agents[i]->getTypeOfAgent() << " " << agents[i]->getHealth() << std::endl;
+	}
+}
 
 void Environment::printAgents() {
 	for (int i = 0; i < agents.size(); i++) {
@@ -62,7 +67,6 @@ Environment::~Environment()
 
 
 void Environment::nextStep() {
-
 	//TODO 
 	for (int i=0; i < 10; i++) {
 		const int row = (rand() % latticeSize);
@@ -73,6 +77,54 @@ void Environment::nextStep() {
 			agentTurn(row, col);
 		}
 	}
+}
+
+void Environment::agentTurn(const int row, const int col) {
+	//TODO: Write a logger for this part and
+	const std::string agentType = agents[lattice[row][col]]->getTypeOfAgent();
+	if (blindAgents) {
+		//ToDO make it a class variable...
+		auto cond = BoundaryCondition(latticeSize);
+		int newRow = cond.torus(row+(rand() % 3)-1);
+		int newCol = cond.torus(col+(rand() % 3)-1);
+		//what if it has no place to go?
+		while (newCol == col && newRow == row) {
+			newRow = cond.torus(row + (rand() % 3) - 1);
+			newCol = cond.torus(col + (rand() % 3) - 1);
+		}
+		std::cout << newRow << " " << newCol << std::endl;
+		int placeToMove = lattice[newRow][newCol];
+		std::cout << placeToMove << std::endl;
+		if (!placeToMove) {
+			std::cout << "we are moving" << std::endl;
+			lattice[newRow][newCol] = lattice[row][col];
+			lattice[row][col] = 0;
+			showLattice();
+			checkNeighbours(newRow, newCol);
+		}
+	}
+}
+
+void Environment::checkNeighbours(const int row, const int col) {
+	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
+	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(1);
+	std::random_shuffle(neighbours.begin(), neighbours.end());
+	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
+		std::cout << '(' << it->first << ' ' << it->second << ')';
+	std::cout << std::endl;
+}
+
+std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
+	std::vector<std::pair<int, int>> neighbours;
+	for(int i = -range; i <= range; i++) {
+		for(int j = -range; j <= range; j++) {
+			if (j != 0 || i != 0) {
+				neighbours.push_back({ i,j });
+			}
+		}
+	}
+	return neighbours;
+
 }
 
 void Environment::agentTurn(const int row, const int col) {
@@ -122,6 +174,8 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
 	}
 	return neighbours;
 }
+
+
 
 
 

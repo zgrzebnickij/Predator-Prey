@@ -3,14 +3,15 @@
 #include "boost\multi_array.hpp"
 #include <vector>
 #include <string>
+#include <set>
+#include <map>
 #include "boost\shared_ptr.hpp"
-#include <vector>
+#include "BoundaryCondition.h"
 
 
 class Environment
 {
 public:
-
 	Environment(const int lattSize, bool blindAgents_ = true);
 	~Environment();
 	void showLattice();
@@ -26,6 +27,5 @@ private:
 	std::vector<std::shared_ptr<Agent>> agents;
 	using Matrix = std::vector<std::vector<int>>;
 	Matrix lattice;
-
 };
 
