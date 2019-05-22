@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="BoundaryCondition.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Predator.h" />
     <ClInclude Include="Prey.h" />

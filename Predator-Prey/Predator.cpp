@@ -1,7 +1,7 @@
 #include "Predator.h"
 
 
-Predator::Predator(const int ID, const int initialHealth) {
+Predator::Predator(const int ID, const int initialHealth) : Agent("Predator"){
 	setId(ID);
 	setHealth(initialHealth); 
 }

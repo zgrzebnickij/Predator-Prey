@@ -1,10 +1,11 @@
 #pragma once
 #include <utility>
+#include <string>
 
 class Agent
 {
 public:
-	Agent() : health(0), visionDistance(0), visionAngle(180) {}
+	Agent(std::string typeOfAgent_) : typeOfAgent(typeOfAgent_), health(0), visionDistance(0), visionAngle(180) {}
 	virtual ~Agent() = default;
 	void setHealth(const int healthToSet) { health = healthToSet; }
 	int getHealth() const { return health; }
@@ -18,8 +19,9 @@ public:
 	void changeHealth(const int healthToAdd) { health += healthToAdd; }
 	void setHeading(std::pair<int, int> newHeading) { heading = newHeading; }
 	std::pair<int, int> getHeading() const { return heading; }
-
+	std::string getTypeOfAgent() const { return typeOfAgent; }
 private:
+	std::string typeOfAgent;
 	int id;
 	int health;
 	double visionDistance;
