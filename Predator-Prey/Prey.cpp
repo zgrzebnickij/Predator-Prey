@@ -1,8 +1,9 @@
 #include "Prey.h"
+#include <string>
 
 
 //TODO: Add minimal health needed to reproduce
-Prey::Prey(const int ID) {
+Prey::Prey(const int ID) : Agent("Prey"){
 	const int initialHealth = 0;
 	setId(ID);
 	setHealth(initialHealth);

@@ -7,7 +7,8 @@
 int main() {
 	auto env = Environment(6);
 	env.showLattice();
-	//env.nextStep();
+	env.printAgents();
+	env.nextStep();
 	std::cout << "Hello world " << std::endl;
 	Logger::getInstance().Log("test", "Przyklad loggera");
 	Logger::getInstance().Log("test", "Tak go uzywac");
