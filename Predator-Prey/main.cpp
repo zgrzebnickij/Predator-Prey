@@ -8,6 +8,7 @@ int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
 	auto env = Environment(6);
 	env.showLattice();
+	env.printAgents();
 	env.nextStep();
 	std::cout << "Hello world " << std::endl;
 	Logger::getInstance().Log("test", "Przyklad loggera");
