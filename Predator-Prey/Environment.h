@@ -5,7 +5,6 @@
 #include <set>
 #include <map>
 #include "boost\shared_ptr.hpp"
-#include "BoundaryCondition.h"
 
 class Environment
 {
