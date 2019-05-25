@@ -4,7 +4,8 @@
 #include "Predator.h"
 #include <cassert>
 #include "boost\shared_ptr.hpp"
-#include "BoundaryCondition.h"
+#include "Utilities.h"
+#include "Enums.h"
 //TODO change that for RandomDevice class
 #include <ctime>   
 #include <cstdlib>
@@ -68,7 +69,7 @@ Environment::~Environment()
 
 void Environment::nextStep() {
 	//TODO 
-	for (int i=0; i < 10; i++) {
+	for (int i=0; i < latticeSize*latticeSize; i++) {
 		const int row = (rand() % latticeSize);
 		const int col = (rand() % latticeSize);
 		//make a move with object
@@ -84,13 +85,12 @@ void Environment::agentTurn(const int row, const int col) {
 	const std::string agentType = agents[lattice[row][col]]->getTypeOfAgent();
 	if (blindAgents) {
 		//ToDO make it a class variable...
-		auto cond = BoundaryCondition(latticeSize);
-		int newRow = cond.torus(row+(rand() % 3)-1);
-		int newCol = cond.torus(col+(rand() % 3)-1);
+		int newRow = Util::BoundaryCondition(row+(rand() % 3)-1, latticeSize);
+		int newCol = Util::BoundaryCondition(col+(rand() % 3)-1, latticeSize);
 		//what if it has no place to go?
 		while (newCol == col && newRow == row) {
-			newRow = cond.torus(row + (rand() % 3) - 1);
-			newCol = cond.torus(col + (rand() % 3) - 1);
+			newRow = Util::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
+			newCol = Util::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
 		}
 		std::cout << newRow << " " << newCol << std::endl;
 		int placeToMove = lattice[newRow][newCol];
@@ -107,13 +107,29 @@ void Environment::agentTurn(const int row, const int col) {
 
 void Environment::checkNeighbours(const int row, const int col) {
 	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
+	std::string currentType = agent->getTypeOfAgent();
+	std::cout << currentType << std::endl;
 	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(1);
 	std::random_shuffle(neighbours.begin(), neighbours.end());
 	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
-		const int agentIndex = lattice[row + it->first][col + it->second];
+		const int newRow = Util::BoundaryCondition(row + it->first, latticeSize);
+		const int newCol = Util::BoundaryCondition(col + it->second, latticeSize);
+		const int agentIndex = lattice[newRow][newCol];
 		if (agentIndex) {
-			std::cout << "Agent " << agents[agentIndex]->getTypeOfAgent();
+			std::string neighbourType = agents[agentIndex]->getTypeOfAgent();
+			std::cout << "Agent " << neighbourType;
 			std::cout << "pozycja " << it->first << it->second << std::endl;
+			if (currentType == "Prey" && neighbourType == "Prey") {
+				//TODO probability of mating
+				std::cout << "Preys mating " << neighbourType;
+			}
+			else if (currentType == "Predator" && neighbourType == "Prey") {
+				agent->changeHealth(agents[agentIndex]->getHealth());
+				lattice[newRow][newCol] = 0;
+				std::cout << "Predator eat prey" << neighbourType;
+				
+			}
+			break;
 		}
 		else {
 			std::cout << "puste" << std::endl;

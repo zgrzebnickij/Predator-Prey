@@ -10,6 +10,7 @@ int main() {
 	env.showLattice();
 	env.printAgents();
 	env.nextStep();
+	env.nextStep();
 	std::cout << "Hello world " << std::endl;
 	Logger::getInstance().Log("test", "Przyklad loggera");
 	Logger::getInstance().Log("test", "Tak go uzywac");
