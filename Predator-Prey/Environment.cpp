@@ -103,8 +103,16 @@ void Environment::checkNeighbours(const int row, const int col) {
 	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
 	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(1);
 	std::random_shuffle(neighbours.begin(), neighbours.end());
-	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
-		std::cout << '(' << it->first << ' ' << it->second << ')';
+	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
+		const int agentIndex = lattice[row + it->first][col + it->second];
+		if (agentIndex) {
+			std::cout << "Agent " << agents[agentIndex]->getTypeOfAgent();
+			std::cout << "pozycja " << it->first << it->second << std::endl;
+		}
+		else {
+			std::cout << "puste" << std::endl;
+		}
+	}
 	std::cout << std::endl;
 }
 
