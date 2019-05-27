@@ -11,12 +11,14 @@ public:
 	Lattice(int latticeSize_);
 
 	Matrix getLattice() const override;
-	Enums::AgentType getAgentTypeOnPosition(std::pair<int, int> position) override;
+	int getAgent(std::pair<int, int> position) override;
 	void spawnAgent(std::pair<int, int> position, Enums::AgentType agentType) override;
 	void moveAgent(std::pair<int, int> origin, std::pair<int, int> destination) override;
+	void killAgent(std::pair<int, int> position) override;
 
 private:
 	void generateLattice();
+	void changeAgent(std::pair<int, int> position, Enums::AgentType agent_type);
 
 	Matrix				latticeMap;
 	int					latticeSize;

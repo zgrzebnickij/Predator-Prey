@@ -18,37 +18,48 @@ Lattice::Matrix Lattice::getLattice() const
 	return latticeMap;
 }
 
-Enums::AgentType Lattice::getAgentTypeOnPosition(std::pair<int, int> position)
+int Lattice::getAgent(std::pair<int, int> position)
 {
-	//TODO: Make guards for index (Boundary Periodic Condition)
-	return static_cast<Enums::AgentType>(latticeMap[position.first][position.second]);
+	const auto row = Utils::BoundaryCondition(position.first, latticeSize);
+	const auto col = Utils::BoundaryCondition(position.second, latticeSize);
+	return latticeMap[row][col];
 }
 
 void Lattice::spawnAgent(std::pair<int, int> position, Enums::AgentType agentType)
 {
-	latticeMap[position.first][position.second] = static_cast<int>(agentType);
-
-	std::stringstream message;
-	message << "Spawned " << Utils::AgentTypeToString.at(agentType) << " at position (" << position.first << ", " <<
-		position.second << ").";
-	Logger::getInstance().Log("lattice", message.str());
+	changeAgent(position, agentType);
 }
 
 void Lattice::moveAgent(std::pair<int, int> origin, std::pair<int, int> destination)
 {
+	const auto originRow = Utils::BoundaryCondition(origin.first, latticeSize);
+	const auto originCol = Utils::BoundaryCondition(origin.second, latticeSize);
+	const auto destRow = Utils::BoundaryCondition(destination.first, latticeSize);
+	const auto destCol = Utils::BoundaryCondition(destination.second, latticeSize);
+
 	std::stringstream message;
-	message << "Trying to move agent from (" << origin.first << ", " << origin.second << ") to (" << destination.first
-		<< ", " << destination.second << ").";
+	message << "Trying to move agent from (" << originRow << ", " << originCol << ") to (" << destRow
+		<< ", " << destCol << ").";
 	Logger::getInstance().Log("lattice", message.str());
 
-	//TODO: Separate if to get clearer logs?
-	if (getAgentTypeOnPosition(origin) != Enums::AgentType::Grass && getAgentTypeOnPosition(destination) == Enums::AgentType::Grass) {
-		latticeMap[destination.first][destination.second] = static_cast<int>(getAgentTypeOnPosition(origin));
-		latticeMap[origin.first][origin.second] = static_cast<int>(Enums::AgentType::Grass);
-		Logger::getInstance().Log("lattice", "\tMoved succesfully");
-	} else {
-		Logger::getInstance().Log("lattice", "\tCannot move - agent can't move or destination is occupied");
+	if (getAgent(origin) == static_cast<int>(Enums::AgentType::Grass)) {
+		Logger::getInstance().Log("lattice", "\tCannot move - there is no moving creature on origin position");
+		return;
 	}
+		
+	if (getAgent(destination) != static_cast<int>(Enums::AgentType::Grass)) {
+		Logger::getInstance().Log("lattice", "\tCannot move - destination position is occupied");
+		return;
+	}
+
+	latticeMap[destRow][destCol] = static_cast<int>(getAgent(origin));
+	latticeMap[originRow][originCol] = static_cast<int>(Enums::AgentType::Grass);
+	Logger::getInstance().Log("lattice", "\tMoved succesfully");
+}
+
+void Lattice::killAgent(std::pair<int, int> position)
+{
+	changeAgent(position, Enums::AgentType::Grass);
 }
 
 void Lattice::generateLattice()
@@ -59,4 +70,16 @@ void Lattice::generateLattice()
 		std::generate(std::execution::par, rowVec.begin(), rowVec.end(), []() { return 0; });
 		return rowVec;
 	});
+}
+
+void Lattice::changeAgent(std::pair<int, int> position, Enums::AgentType agent_type)
+{
+	const auto row = Utils::BoundaryCondition(position.first, latticeSize);
+	const auto col = Utils::BoundaryCondition(position.second, latticeSize);
+	latticeMap[row][col] = static_cast<int>(agent_type);
+
+	std::stringstream message;
+	message << "There is " << Utils::AgentTypeToString.at(agent_type) << " at position (" << row << ", " <<
+		col << ") now.";
+	Logger::getInstance().Log("lattice", message.str());
 }
