@@ -126,6 +126,7 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
 		}
 	}
 	return neighbours;
+<<<<<<< HEAD
 
 }
 
@@ -176,8 +177,6 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
 	}
 	return neighbours;
 }
-
-
 
 
 

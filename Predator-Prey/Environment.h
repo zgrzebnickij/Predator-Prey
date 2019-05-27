@@ -1,10 +1,7 @@
 #pragma once
-<<<<<<< HEAD
 #include "Agent.h"
 #include "boost\multi_array.hpp"
-=======
 #include "Interfaces/Agent.h"
->>>>>>> Compilation error and merge conflict fixes
 #include <vector>
 #include <string>
 

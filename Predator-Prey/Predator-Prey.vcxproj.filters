@@ -60,7 +60,7 @@
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
-      <Filter>Header Files\Interfaces</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Predator.h">
       <Filter>Header Files</Filter>
@@ -75,6 +75,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Predator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interfaces\Agent.h">
