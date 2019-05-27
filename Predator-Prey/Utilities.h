@@ -9,7 +9,7 @@ namespace Utils
 {
 	inline std::string CurrentDateTime()
 	{
-		boost::posix_time::ptime currentTime = boost::posix_time::microsec_clock::local_time();
+		const boost::posix_time::ptime currentTime = boost::posix_time::microsec_clock::local_time();
 		std::string currentTimeStr = to_simple_string(currentTime);
 		return currentTimeStr;
 	}

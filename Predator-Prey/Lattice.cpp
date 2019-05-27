@@ -20,6 +20,7 @@ Lattice::Matrix Lattice::getLattice() const
 
 Enums::AgentType Lattice::getAgentTypeOnPosition(std::pair<int, int> position)
 {
+	//TODO: Make guards for index (Boundary Periodic Condition)
 	return static_cast<Enums::AgentType>(latticeMap[position.first][position.second]);
 }
 

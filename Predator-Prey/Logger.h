@@ -1,10 +1,20 @@
 #pragma once
 #include <string>
+#include <experimental/filesystem>
 
 class Logger
 {
 private:
-	Logger() {}
+	Logger()
+	{
+		namespace fs = std::experimental::filesystem;
+
+		const std::string logDirectory = "Logs/";
+		const fs::path pathToLogs(logDirectory);
+		if (!exists(pathToLogs)) {
+			fs::create_directories(logDirectory);
+		}
+	}
 
 public:
 	static Logger& getInstance()
