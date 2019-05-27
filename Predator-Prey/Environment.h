@@ -1,6 +1,4 @@
 #pragma once
-#include "Agent.h"
-#include "boost\multi_array.hpp"
 #include "Interfaces/Agent.h"
 #include <vector>
 #include <string>

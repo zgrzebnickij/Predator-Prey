@@ -11,7 +11,7 @@
 #include <algorithm>
 
 
-Environment::Environment(int latteSize_, bool blindAgents_):
+Environment::Environment(int latteSize_, bool blindAgents_) :
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_)
 {
@@ -19,10 +19,10 @@ Environment::Environment(int latteSize_, bool blindAgents_):
 	//TODO change that
 	srand(time(0));
 	int values = 1;
-	for (int i = 0; i<latticeSize; i++)
+	for (int i = 0; i < latticeSize; i++)
 	{
 		std::vector <int> rowVec;
-		for (int j = 0; j<latticeSize; j++)
+		for (int j = 0; j < latticeSize; j++)
 		{
 			if ((i + j) % 4 == 0) {
 				rowVec.push_back(values);
@@ -35,7 +35,7 @@ Environment::Environment(int latteSize_, bool blindAgents_):
 		lattice.push_back(rowVec);
 	}
 	// Assign values to the elements
-	
+
 	for (int i = 0; i < values; i++) {
 		if (i % 2) {
 			agents.push_back(std::shared_ptr<Agent>(new Predator(i + 1, 30)));
@@ -55,7 +55,7 @@ void Environment::printAgents() {
 
 void Environment::nextStep() {
 	//TODO 
-	for (int i=0; i < latticeSize*latticeSize; i++) {
+	for (int i = 0; i < latticeSize*latticeSize; i++) {
 		const int row = (rand() % latticeSize);
 		const int col = (rand() % latticeSize);
 		//make a move with object
@@ -70,8 +70,8 @@ void Environment::agentTurn(const int row, const int col) {
 	//TODO: Write a logger for this part and
 	if (blindAgents) {
 		//ToDO make it a class variable...
-		int newRow = Utils::BoundaryCondition(row+(rand() % 3)-1, latticeSize);
-		int newCol = Utils::BoundaryCondition(col+(rand() % 3)-1, latticeSize);
+		int newRow = Utils::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
+		int newCol = Utils::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
 		//what if it has no place to go?
 		while (newCol == col && newRow == row) {
 			newRow = Utils::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
@@ -108,7 +108,7 @@ void Environment::checkNeighbours(const int row, const int col) {
 			else if (currentType == Enums::AgentType::Predator && neighbourType == Enums::AgentType::Predator) {
 				agent->changeHealth(agents[agentIndex]->getHealth());
 				lattice[newRow][newCol] = 0;
-				
+
 			}
 			break;
 		}
@@ -118,58 +118,8 @@ void Environment::checkNeighbours(const int row, const int col) {
 
 std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
 	std::vector<std::pair<int, int>> neighbours;
-	for(int i = -range; i <= range; i++) {
-		for(int j = -range; j <= range; j++) {
-			if (j != 0 || i != 0) {
-				neighbours.push_back({ i,j });
-			}
-		}
-	}
-	return neighbours;
-<<<<<<< HEAD
-
-}
-
-void Environment::agentTurn(const int row, const int col) {
-	//TODO: Write a logger for this part and
-	const std::string agentType = agents[lattice[row][col]]->getTypeOfAgent();
-	if (blindAgents) {
-		//ToDO make it a class variable...
-		auto cond = BoundaryCondition(latticeSize);
-
-		int newRow = cond.torus(row+(rand() % 3)-1);
-		int newCol = cond.torus(col+(rand() % 3)-1);
-		//what if it has no place to go?
-		while (newCol == col && newRow == row) {
-			newRow = cond.torus(row + (rand() % 3) - 1);
-			newCol = cond.torus(col + (rand() % 3) - 1);
-		}
-		std::cout << newRow << " " << newCol << std::endl;
-		int placeToMove = lattice[newRow][newCol];
-		std::cout << placeToMove << std::endl;
-		if (!placeToMove) {
-			std::cout << "we are moving" << std::endl;
-			lattice[newRow][newCol] = lattice[row][col];
-			lattice[row][col] = 0;
-			showLattice();
-			checkNeighbours(newRow, newCol);
-		}
-	}
-}
-
-void Environment::checkNeighbours(const int row, const int col) {
-	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
-	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(1);
-	std::random_shuffle(neighbours.begin(), neighbours.end());
-	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
-		std::cout << '(' << it->first << ' ' << it->second << ')';
-	std::cout << std::endl;
-}
-
-std::vector<std::pair<int, int>> Environment::neighboursFromRange(int range) {
-	std::vector<std::pair<int, int>> neighbours;
-	for(int i = -range; i <= range; i++) {
-		for(int j = -range; j <= range; j++) {
+	for (int i = -range; i <= range; i++) {
+		for (int j = -range; j <= range; j++) {
 			if (j != 0 || i != 0) {
 				neighbours.push_back({ i,j });
 			}
