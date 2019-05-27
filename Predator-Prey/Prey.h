@@ -1,9 +1,9 @@
-#include "Agent.h"
+#include "Interfaces/Agent.h"
 
 
 class Prey : public Agent
 {
 public:
-	Prey(const int ID);
+	Prey(int ID);
 	void updateHealth() override;	
 };

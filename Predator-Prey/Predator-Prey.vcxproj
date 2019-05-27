@@ -84,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,8 +131,8 @@
     <ClCompile Include="RandomDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Agent.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="Interfaces\Agent.h" />
     <ClInclude Include="Interfaces\ILattice.h" />
     <ClInclude Include="Lattice.h" />
     <ClInclude Include="Environment.h" />

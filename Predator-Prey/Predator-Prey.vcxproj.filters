@@ -56,9 +56,6 @@
     <ClInclude Include="Lattice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Agent.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="Interfaces\ILattice.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
@@ -70,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="Environment.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\Agent.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

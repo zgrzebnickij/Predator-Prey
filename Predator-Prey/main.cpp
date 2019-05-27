@@ -18,9 +18,9 @@ int main() {
 	Logger::getInstance().Log("inny_log", "Pliki sa tworzone i dopisywane na koncu");
 
 	std::shared_ptr<ILattice> lattice(new Lattice(5));
-	const std::pair<int, int> position(3, 4);
-	const std::pair<int, int> position2(3, 5);
-	const std::pair<int, int> position3(3, 6);
+	const std::pair<int, int> position(1, 2);
+	const std::pair<int, int> position2(1, 3);
+	const std::pair<int, int> position3(1, 4);
 
 	auto agent = lattice->getAgentTypeOnPosition(position);
 	lattice->spawnAgent(position, Enums::AgentType::Predator);

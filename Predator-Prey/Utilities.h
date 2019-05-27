@@ -22,10 +22,6 @@ namespace Utils
 
 
 	inline int BoundaryCondition(int index, int size) {
-		int newIndex = index % size;
-		if (newIndex < 0) {
-			newIndex += size;
-		}
-		return newIndex;
+		const int newIndex = index % size; return newIndex >= 0 ? newIndex : newIndex + size;
 	}
 }
