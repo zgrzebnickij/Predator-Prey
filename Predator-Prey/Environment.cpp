@@ -3,20 +3,19 @@
 #include "Prey.h"
 #include "Predator.h"
 #include <cassert>
-#include "boost\shared_ptr.hpp"
-#include "Utilities.h"
-#include "Enums.h"
 //TODO change that for RandomDevice class
 #include <ctime>   
 #include <cstdlib>
-
+#include <map>
+#include "Utilities.h"
+#include <algorithm>
 
 
 Environment::Environment(int latteSize_, bool blindAgents_):
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_)
 {
-	std::map < std::string, int > foodChain;
+	std::map<std::string, int> foodChain;
 	//TODO change that
 	srand(time(0));
 	int values = 1;
@@ -50,22 +49,9 @@ Environment::Environment(int latteSize_, bool blindAgents_):
 
 void Environment::printAgents() {
 	for (int i = 0; i < agents.size(); i++) {
-		std::cout << "Index: " << i << " " << agents[i]->getTypeOfAgent() << " " << agents[i]->getHealth() << std::endl;
+		std::cout << "Index: " << i << " " << Utils::AgentTypeToString.at(agents[i]->getAgentType()) << " " << agents[i]->getHealth() << std::endl;
 	}
 }
-
-void Environment::printAgents() {
-	for (int i = 0; i < agents.size(); i++) {
-		std::cout << "Index: " << i << " " << agents[i]->getTypeOfAgent() << " " << agents[i]->getHealth() << std::endl;
-	}
-}
-
-
-
-Environment::~Environment()
-{
-}
-
 
 void Environment::nextStep() {
 	//TODO 
@@ -82,15 +68,14 @@ void Environment::nextStep() {
 
 void Environment::agentTurn(const int row, const int col) {
 	//TODO: Write a logger for this part and
-	const std::string agentType = agents[lattice[row][col]]->getTypeOfAgent();
 	if (blindAgents) {
 		//ToDO make it a class variable...
-		int newRow = Util::BoundaryCondition(row+(rand() % 3)-1, latticeSize);
-		int newCol = Util::BoundaryCondition(col+(rand() % 3)-1, latticeSize);
+		int newRow = Utils::BoundaryCondition(row+(rand() % 3)-1, latticeSize);
+		int newCol = Utils::BoundaryCondition(col+(rand() % 3)-1, latticeSize);
 		//what if it has no place to go?
 		while (newCol == col && newRow == row) {
-			newRow = Util::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
-			newCol = Util::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
+			newRow = Utils::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
+			newCol = Utils::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
 		}
 		std::cout << newRow << " " << newCol << std::endl;
 		int placeToMove = lattice[newRow][newCol];
@@ -107,32 +92,25 @@ void Environment::agentTurn(const int row, const int col) {
 
 void Environment::checkNeighbours(const int row, const int col) {
 	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
-	std::string currentType = agent->getTypeOfAgent();
-	std::cout << currentType << std::endl;
+	auto currentType = agent->getAgentType();
 	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(1);
-	std::random_shuffle(neighbours.begin(), neighbours.end());
+	//TODO: Change becuase random_shuffle was removed from C++17 std::random_shuffle(neighbours.begin(), neighbours.end());
 	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
-		const int newRow = Util::BoundaryCondition(row + it->first, latticeSize);
-		const int newCol = Util::BoundaryCondition(col + it->second, latticeSize);
+		const int newRow = Utils::BoundaryCondition(row + it->first, latticeSize);
+		const int newCol = Utils::BoundaryCondition(col + it->second, latticeSize);
 		const int agentIndex = lattice[newRow][newCol];
 		if (agentIndex) {
-			std::string neighbourType = agents[agentIndex]->getTypeOfAgent();
-			std::cout << "Agent " << neighbourType;
+			auto neighbourType = agents[agentIndex]->getAgentType();
 			std::cout << "pozycja " << it->first << it->second << std::endl;
-			if (currentType == "Prey" && neighbourType == "Prey") {
+			if (currentType == Enums::AgentType::Prey && neighbourType == Enums::AgentType::Prey) {
 				//TODO probability of mating
-				std::cout << "Preys mating " << neighbourType;
 			}
-			else if (currentType == "Predator" && neighbourType == "Prey") {
+			else if (currentType == Enums::AgentType::Predator && neighbourType == Enums::AgentType::Predator) {
 				agent->changeHealth(agents[agentIndex]->getHealth());
 				lattice[newRow][newCol] = 0;
-				std::cout << "Predator eat prey" << neighbourType;
 				
 			}
 			break;
-		}
-		else {
-			std::cout << "puste" << std::endl;
 		}
 	}
 	std::cout << std::endl;

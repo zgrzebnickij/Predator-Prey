@@ -8,8 +8,4 @@ namespace Enums {
 		Prey,
 		Predator
 	};
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> changes in environment
