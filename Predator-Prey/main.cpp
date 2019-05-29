@@ -3,6 +3,7 @@
 #include "Lattice.h"
 #include "Logger.h"
 #include "Environment.h"
+#include "IdMenager.h"
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;

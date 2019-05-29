@@ -86,5 +86,8 @@
     <ClInclude Include="Interfaces\IAgent.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="IdMenager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
