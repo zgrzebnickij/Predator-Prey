@@ -2,10 +2,21 @@
 #include "Interfaces/ILattice.h"
 #include "Lattice.h"
 #include "ModelGUI.h"
-
+#include "Logger.h"
+#include "Environment.h"
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
+	auto env = Environment(6);
+	env.showLattice();
+	env.printAgents();
+	env.nextStep();
+	env.nextStep();
+
+	std::cout << "Hello world " << std::endl;
+	Logger::getInstance().Log("test", "Przyklad loggera");
+	Logger::getInstance().Log("test", "Tak go uzywac");
+	Logger::getInstance().Log("inny_log", "Pliki sa tworzone i dopisywane na koncu");
 
 	std::unique_ptr<ILattice> lattice(new Lattice(5));
 	ModelGUI gui(lattice->getLattice(), 800, 1200, 800);

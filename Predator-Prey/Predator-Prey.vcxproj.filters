@@ -36,6 +36,12 @@
     <ClCompile Include="ModelGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Predator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Prey.h">
@@ -53,9 +59,6 @@
     <ClInclude Include="Lattice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Agent.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="Interfaces\ILattice.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
@@ -64,6 +67,15 @@
     </ClInclude>
     <ClInclude Include="ModelGUI.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Predator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\Agent.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

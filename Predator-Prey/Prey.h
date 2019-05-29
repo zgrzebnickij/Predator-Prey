@@ -1,9 +1,9 @@
-#pragma once
-#include "Agent.h"
+#include "Interfaces/Agent.h"
 
 
 class Prey : public Agent
 {
 public:
-	void updateHealth() override;
+	Prey(int ID);
+	void updateHealth() override;	
 };
