@@ -1,6 +1,10 @@
 #include "Predator.h"
 
 
+Predator::Predator() : Agent(Enums::AgentType::Predator)
+{
+}
+
 Predator::Predator(const int ID, const int initialHealth) : Agent(Enums::AgentType::Predator){
 	setId(ID);
 	setHealth(initialHealth); 

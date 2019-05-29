@@ -4,7 +4,7 @@ namespace Enums {
 
 	enum class AgentType
 	{
-		Grass,
+		Field,
 		Prey,
 		Predator
 	};

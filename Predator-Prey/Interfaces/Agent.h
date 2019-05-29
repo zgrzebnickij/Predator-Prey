@@ -1,6 +1,5 @@
 #pragma once
 #include <utility>
-#include <string>
 #include "Enums.h"
 
 class Agent
@@ -28,8 +27,8 @@ private:
 	Enums::AgentType agentType;
 	int id;
 	int health;
-	double visionDistance;
 	int visionAngle;
+	double visionDistance;
 	std::pair<int, int> heading;
 };
 
