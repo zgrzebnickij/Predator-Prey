@@ -1,4 +1,4 @@
-#include "Interfaces/Agent.h"
+#include "Interfaces/IAgent.h"
 
 
 class Prey : public Agent

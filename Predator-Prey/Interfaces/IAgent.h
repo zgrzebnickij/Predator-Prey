@@ -6,13 +6,12 @@
 class Agent
 {
 public:
-	Agent(Enums::AgentType agentType_) : agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
+	Agent(Enums::AgentType agentType_,unsigned int id_) :id(id_), agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
 	virtual ~Agent() = default;
 
 	Enums::AgentType getAgentType() const { return agentType; }
 	void setHealth(const int healthToSet) { health = healthToSet; }
 	int getHealth() const { return health; }
-	void setId(const int ID) { id = ID; }
 	int getId() const { return id; }
 	void setVisionDistance(const double distance) { visionDistance = distance; }
 	double getVisionDistance() const { return visionDistance; }
@@ -26,7 +25,7 @@ public:
 
 private:
 	Enums::AgentType agentType;
-	int id;
+	const unsigned int id;
 	int health;
 	double visionDistance;
 	int visionAngle;

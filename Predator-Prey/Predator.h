@@ -1,5 +1,5 @@
 #pragma once
-#include "Interfaces/Agent.h"
+#include "Interfaces/IAgent.h"
 
 class Predator : public Agent
 {
