@@ -10,7 +10,7 @@ public:
 
 	Lattice(int latticeSize_);
 
-	Matrix getLattice() const override;
+	Matrix* getLattice() override;
 	int getAgent(std::pair<int, int> position) override;
 	void spawnAgent(std::pair<int, int> position, Enums::AgentType agentType) override;
 	void moveAgent(std::pair<int, int> origin, std::pair<int, int> destination) override;

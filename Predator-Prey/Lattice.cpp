@@ -13,9 +13,9 @@ Lattice::Lattice(int latticeSize_) :
 	generateLattice();
 }
 
-Lattice::Matrix Lattice::getLattice() const
+Lattice::Matrix* Lattice::getLattice()
 {
-	return latticeMap;
+	return &latticeMap;
 }
 
 int Lattice::getAgent(std::pair<int, int> position)
@@ -67,7 +67,7 @@ void Lattice::generateLattice()
 	std::generate(std::execution::par, latticeMap.begin(), latticeMap.end(), [this]()
 	{
 		std::vector<int> rowVec(latticeSize);
-		std::generate(std::execution::par, rowVec.begin(), rowVec.end(), []() { return 0; });
+		std::generate(std::execution::par, rowVec.begin(), rowVec.end(), []() { return static_cast<int>(Enums::AgentType::Grass); });
 		return rowVec;
 	});
 }

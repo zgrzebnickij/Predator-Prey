@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Lattice.cpp" />
+    <ClCompile Include="LatticePrinter.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Prey.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Interfaces\ILattice.h" />
     <ClInclude Include="Lattice.h" />
+    <ClInclude Include="LatticePrinter.h" />
     <ClInclude Include="Prey.h" />
   </ItemGroup>
   <ItemGroup>

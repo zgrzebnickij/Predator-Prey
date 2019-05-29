@@ -33,6 +33,9 @@
     <ClCompile Include="Lattice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LatticePrinter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Prey.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LatticePrinter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
