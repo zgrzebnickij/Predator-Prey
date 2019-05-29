@@ -45,7 +45,7 @@ Environment::Environment(int latteSize_, bool blindAgents_) :
 			agents.push_back(std::shared_ptr<Agent>(new Predator(i + 1, 30)));
 		}
 		else {
-			agents.push_back(std::shared_ptr<Agent>(new Prey(i + 1)));
+			agents.push_back(std::shared_ptr<Agent>(new Prey(i+1)));
 		}
 	}
 

@@ -3,10 +3,16 @@
 #include "Lattice.h"
 #include "Logger.h"
 #include "Environment.h"
-#include "IdMenager.h"
+#include "Utilities.h"
+#include "Prey.h"
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
+	auto prey = Prey(Utils::getfreeId());
+	std::cout << Utils::getfreeId();
+	prey.kill(&Utils::addIdToStack);
+	std::cout << Utils::getfreeId(); 
+	
 	auto env = Environment(6);
 	env.showLattice();
 	env.printAgents();
