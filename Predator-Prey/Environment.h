@@ -15,7 +15,8 @@ public:
 	void printAgents();
 	void agentTurn(int row, int col);
 	void checkNeighbours(int row, int col);
-	std::vector<std::pair<int, int>> neighboursFromRange(int range);
+	std::vector<std::pair<int, int>> neighboursFromRange(const double visionAngle,
+		const double visionRange, const std::pair<int, int> heading);
 private:
 	int latticeSize;
 	bool blindAgents;
