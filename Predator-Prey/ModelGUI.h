@@ -2,24 +2,28 @@
 #include <SFML/Graphics.hpp>
 #include <thread>
 
-class LatticePrinter
+class ModelGUI
 {
 	using Matrix = std::vector<std::vector<int>>;
 public:
-	LatticePrinter(Matrix* matrix_);
-	~LatticePrinter();
+	ModelGUI(const Matrix* matrix_, float windowHeight_, float windowWidth_, float latticeWidth_);
+	~ModelGUI();
 
 private:
-	void printLattice();
+	void startGUI();
 	void renderingThread();
 	void generateField();
 	void putAgents();
+	void printLattice();
 
 	sf::RenderWindow window;
 	std::thread renderThread;
-	Matrix* latticeMap;
+	const Matrix* latticeMap;
 
-	double scaleFactor;
+	float scaleFactor;
+	float windowHeight;
+	float windowWidth;
+	float latticeWidth;
 
 	sf::Texture grassTexture;
 	sf::Texture wolfTexture;

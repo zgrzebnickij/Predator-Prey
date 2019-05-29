@@ -33,7 +33,7 @@
     <ClCompile Include="Lattice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LatticePrinter.cpp">
+    <ClCompile Include="ModelGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LatticePrinter.h">
+    <ClInclude Include="ModelGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

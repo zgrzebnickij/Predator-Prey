@@ -1,14 +1,14 @@
 #include <iostream>
 #include "Interfaces/ILattice.h"
 #include "Lattice.h"
-#include "LatticePrinter.h"
+#include "ModelGUI.h"
 
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
 
-	std::shared_ptr<ILattice> lattice(new Lattice(5));
-	LatticePrinter printer(lattice->getLattice());
+	std::unique_ptr<ILattice> lattice(new Lattice(5));
+	ModelGUI gui(lattice->getLattice(), 800, 1200, 800);
 	const std::pair<int, int> position(4, 4);
 	const std::pair<int, int> position2(4, 5);
 	const std::pair<int, int> position3(4, 6);

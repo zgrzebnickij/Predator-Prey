@@ -1,13 +1,16 @@
-#include "LatticePrinter.h"
+#include "ModelGUI.h"
 #include "Logger.h"
 #include "Enums.h"
 #include <execution>
-#include <iostream>
+#include <TGUI/TGUI.hpp>
 
 
-LatticePrinter::LatticePrinter(Matrix* matrix_)
-	: latticeMap(matrix_)
-	, scaleFactor(1)
+ModelGUI::ModelGUI(const Matrix* matrix_, float windowHeight_, float windowWidth_, float latticeWidth_) :
+	latticeMap(matrix_),
+	scaleFactor(1.0f),
+	windowHeight(windowHeight_),
+	windowWidth(windowWidth_),
+	latticeWidth(latticeWidth_)
 {
 	if (!grassTexture.loadFromFile("Resources/Textures/field.png") || 
 		!wolfTexture.loadFromFile("Resources/Textures/wolf.png") || 
@@ -22,26 +25,27 @@ LatticePrinter::LatticePrinter(Matrix* matrix_)
 	wolfSprite.setTexture(wolfTexture);
 	sheepSprite.setTexture(sheepTexture);
 
-	printLattice();
+	startGUI();
 }
 
-LatticePrinter::~LatticePrinter()
+ModelGUI::~ModelGUI()
 {
 	renderThread.join();
 }
 
-void LatticePrinter::printLattice()
+void ModelGUI::startGUI()
 {
-	scaleFactor = (800.0 / latticeMap->size()) / grassTexture.getSize().x;
+	scaleFactor = (latticeWidth / latticeMap->size()) / grassTexture.getSize().x;
 	grassSprite.setScale(scaleFactor, scaleFactor);
 	wolfSprite.setScale(scaleFactor, scaleFactor);
 	sheepSprite.setScale(scaleFactor, scaleFactor);
 	renderThread = std::thread([=] { renderingThread(); });
 }
 
-void LatticePrinter::renderingThread()
+void ModelGUI::renderingThread()
 {
-	window.create(sf::VideoMode(800, 800), "Predator-Prey Model");
+	window.create(sf::VideoMode(windowWidth, windowHeight), "Predator-Prey Model");
+	tgui::Gui gui{ window };
 	window.setFramerateLimit(60);
 
 	while (window.isOpen()) {
@@ -50,16 +54,16 @@ void LatticePrinter::renderingThread()
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
+			gui.handleEvent(event);
 		}
+		printLattice();
 
-		generateField();
-		putAgents();
-	
+		gui.draw();
 		window.display();
 	}
 }
 
-void LatticePrinter::putAgents()
+void ModelGUI::putAgents()
 {
 	for (auto row = 0; row < latticeMap->size(); row++) {
 		for (auto col = 0; col < latticeMap->size(); col++) {
@@ -77,7 +81,7 @@ void LatticePrinter::putAgents()
 	}
 }
 
-void LatticePrinter::generateField()
+void ModelGUI::generateField()
 {
 	for (auto row = 0; row < latticeMap->size(); row++) {
 		for (auto col = 0; col < latticeMap->size(); col++) {
@@ -85,4 +89,10 @@ void LatticePrinter::generateField()
 			window.draw(grassSprite);
 		}
 	}
+}
+
+void ModelGUI::printLattice()
+{
+	generateField();
+	putAgents();
 }
