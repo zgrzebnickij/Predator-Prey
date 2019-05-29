@@ -6,7 +6,7 @@
 class Agent
 {
 public:
-	Agent(Enums::AgentType agentType_,unsigned int id_) :id(id_), agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
+	Agent(Enums::AgentType agentType_,const int id_) :id(id_), agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
 	virtual ~Agent() = default;
 
 	Enums::AgentType getAgentType() const { return agentType; }
@@ -25,7 +25,7 @@ public:
 
 private:
 	Enums::AgentType agentType;
-	const unsigned int id;
+	const int id;
 	int health;
 	double visionDistance;
 	int visionAngle;
