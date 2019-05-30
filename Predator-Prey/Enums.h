@@ -6,6 +6,7 @@ namespace Enums {
 	{
 		Field,
 		Prey,
-		Predator
+		Predator,
+		Unknown
 	};
 }

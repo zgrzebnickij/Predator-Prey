@@ -4,6 +4,7 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/unordered_map.hpp>
 #include "Enums.h"
+#include <stack>
 
 namespace Utils
 {
@@ -22,5 +23,24 @@ namespace Utils
 
 	inline int BoundaryCondition(int index, int size) {
 		const int newIndex = index % size; return newIndex >= 0 ? newIndex : newIndex + size;
+	}
+
+	static int max = 0;
+	static std::stack<int> freeIDs;
+
+	inline int getFreeID() {
+		if (freeIDs.empty()) {
+			max++;
+			return max;
+		}
+
+		const int ID = freeIDs.top();
+		freeIDs.pop();
+
+		return ID;
+	}
+
+	inline void addIDToStack(const int ID) {
+		freeIDs.push(ID);
 	}
 }

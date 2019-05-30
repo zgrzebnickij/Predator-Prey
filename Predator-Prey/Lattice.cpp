@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Utilities.h"
 #include <boost/format.hpp>
+#include "RandomDevice.h"
 
 
 Lattice::Lattice(int latticeSize_, QuantityMap& agentsQuantity_) :
@@ -31,9 +32,9 @@ int Lattice::getAgent(Position position)
 
 void Lattice::spawnAgent(Position position, int agentID, Enums::AgentType agentType)
 {
-	//TODO: Change hardcoded ID to getter from agent. Need Kuba's implementation for factory
-	agentsVec.push_back(factory.createAgent(agentType));
-	changeAgentOnLattice(position, agentID);
+	auto agent = factory.createAgent(agentType);
+	changeAgentOnLattice(position, agent->getID());
+	agentsVec.push_back(std::move(agent));
 }
 
 void Lattice::moveAgent(Position origin, Position destination)
@@ -70,6 +71,17 @@ void Lattice::killAgent(Position position)
 	//TODO: Usunac z wektora
 }
 
+Enums::AgentType Lattice::checkAgentType(int ID)
+{
+	auto it = std::find_if(std::execution::par, agentsVec.begin(), agentsVec.end(), 
+	[=](std::unique_ptr<Agent>& agent)	{ return agent->getID() == ID; });
+
+	if(it != agentsVec.end()) {
+		return it->get()->getAgentType();
+	}
+	return Enums::AgentType::Unknown;
+}
+
 void Lattice::generateLattice()
 {
 	std::generate(std::execution::par, latticeMap.begin(), latticeMap.end(), [this]()
@@ -83,13 +95,12 @@ void Lattice::generateLattice()
 void Lattice::spawnAgents()
 {
 	auto agentVecIter = agentsVec.begin();
-	std::for_each(std::execution::par, agentsQuantity.begin(), agentsQuantity.end(), [this, &agentVecIter](const QuantityMap::value_type& p)
+	std::for_each(agentsQuantity.begin(), agentsQuantity.end(), [this, &agentVecIter](const QuantityMap::value_type& p)
 	{
-		std::generate_n(std::execution::par, agentVecIter, p.second, [this, &p]()
+		std::generate_n(agentVecIter, p.second, [this, &p]()
 		{
 			auto agent = factory.createAgent(p.first);
-			//TODO: Rand position and fix ID
-			//changeAgentOnLattice(std::pair<int, int>(1, 1), agent->getId());
+			changeAgentOnLattice(generatePosition(), agent->getID());
 			return agent;
 		});
 		std::advance(agentVecIter, p.second);
@@ -103,7 +114,18 @@ void Lattice::changeAgentOnLattice(Position position, int agentID)
 	latticeMap[row][col] = agentID;
 
 	std::stringstream message;
-	message << "There is " << Utils::AgentTypeToString.at(static_cast<Enums::AgentType>(agentID)) << " at position (" << row << ", " <<
+	message << "There is agent with ID: " << agentID << " at position (" << row << ", " <<
 		col << ") now.";
 	Logger::getInstance().Log("lattice", message.str());
+}
+
+Lattice::Position Lattice::generatePosition()
+{
+	Position position;
+	do
+	{
+		position = RandomDevice::getInstance().getRandomPosition(latticeSize);
+	} while (latticeMap[position.first][position.second] != 0);
+
+	return position;
 }

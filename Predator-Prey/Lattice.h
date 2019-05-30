@@ -22,11 +22,13 @@ public:
 	void spawnAgent(Position position, int agentID, Enums::AgentType agentType) override;
 	void moveAgent(Position origin, Position destination) override;
 	void killAgent(Position position) override;
+	Enums::AgentType checkAgentType(int ID) override;
 
 private:
 	void generateLattice();
 	void spawnAgents();
 	void changeAgentOnLattice(Position position, int agentID);
+	Position generatePosition();
 
 	int				latticeSize;
 	Matrix			latticeMap;

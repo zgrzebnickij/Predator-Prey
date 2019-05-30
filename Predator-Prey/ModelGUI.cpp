@@ -5,12 +5,13 @@
 #include <TGUI/TGUI.hpp>
 
 
-ModelGUI::ModelGUI(const Matrix* matrix_, float windowHeight_, float windowWidth_, float latticeWidth_) :
+ModelGUI::ModelGUI(const Matrix* matrix_, CheckTypeClbk callback, float windowHeight_, float windowWidth_, float latticeWidth_) :
 	latticeMap(matrix_),
 	scaleFactor(1.0f),
 	windowHeight(windowHeight_),
 	windowWidth(windowWidth_),
-	latticeWidth(latticeWidth_)
+	latticeWidth(latticeWidth_),
+	checkType(callback)
 {
 	if (!grassTexture.loadFromFile("Resources/Textures/field.png") || 
 		!wolfTexture.loadFromFile("Resources/Textures/wolf.png") || 
@@ -67,7 +68,7 @@ void ModelGUI::putAgents()
 {
 	for (auto row = 0; row < latticeMap->size(); row++) {
 		for (auto col = 0; col < latticeMap->size(); col++) {
-			switch (static_cast<Enums::AgentType>(latticeMap->at(row).at(col))) {
+			switch (checkType(latticeMap->at(row).at(col))) {
 			case Enums::AgentType::Predator:
 				wolfSprite.setPosition(col * wolfTexture.getSize().x * scaleFactor, row * wolfTexture.getSize().y * scaleFactor);
 				window.draw(wolfSprite);
