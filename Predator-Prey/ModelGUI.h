@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <thread>
-#include "Interfaces/Agent.h"
+#include "Interfaces/IAgent.h"
 
 class ModelGUI
 {

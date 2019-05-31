@@ -9,14 +9,8 @@
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
-	auto prey = Prey(Utils::getfreeId());
-	std::cout << Utils::getfreeId();
-	prey.kill(&Utils::addIdToStack);
-	std::cout << Utils::getfreeId(); 
 	
 	auto env = Environment(6);
-	env.showLattice();
-	env.printAgents();
 	env.nextStep();
 	env.nextStep();
 

@@ -5,6 +5,8 @@
 #include <cassert>
 #include "Logger.h"
 #include <boost/numeric/ublas/vector.hpp>
+#include "Lattice.h"
+#include "RandomDevice.h"
 //TODO change that for RandomDevice class
 #include <ctime>   
 #include <cstdlib>
@@ -20,122 +22,66 @@ Environment::Environment(int latteSize_, bool blindAgents_) :
 	blindAgents(blindAgents_)
 {
 	std::map<std::string, int> foodChain;
-	//TODO change that
-	srand(time(0));
-	int values = 1;
-	for (int i = 0; i < latticeSize; i++)
-	{
-		std::vector <int> rowVec;
-		for (int j = 0; j < latticeSize; j++)
-		{
-			if ((i + j) % 4 == 0) {
-				rowVec.push_back(values);
-				values++;
-			}
-			else {
-				rowVec.push_back(0);
-			}
-		}
-		lattice.push_back(rowVec);
-	}
-	// Assign values to the elements
-
-	for (int i = 0; i < values; i++) {
-		if (i % 2) {
-			agents.push_back(std::shared_ptr<Agent>(new Predator(i + 1, 30)));
-		}
-		else {
-			agents.push_back(std::shared_ptr<Agent>(new Prey(i+1)));
-		}
-	}
-
+	agentTurn = (blindAgents) ? blindAgentTurn : sightedAgentTurn;
+	lattice = new Lattice(latticeSize);
+	//lattice->generrate()
 }
 
-void Environment::printAgents() {
-	for (int i = 0; i < agents.size(); i++) {
-		std::cout << "Index: " << i << " " << Utils::AgentTypeToString.at(agents[i]->getAgentType()) << " " << agents[i]->getHealth() << std::endl;
-	}
-}
 
 void Environment::nextStep() {
-	//TODO 
 	for (int i = 0; i < latticeSize*latticeSize; i++) {
-		const int row = (rand() % latticeSize);
-		const int col = (rand() % latticeSize);
-		if (lattice[row][col]) {
-			agentTurn(row, col);
+		std::pair<int, int> position(RandomDevice::getInstance().getRandomPosition(latticeSize));
+		if (lattice->getAgent(position)) {
+			agentTurn(position);
 		}
 	}
 }
 
-void Environment::agentTurn(const int row, const int col) {
-	//TODO: Write a logger for this part and
-	if (blindAgents) {
-		//ToDO make it a class variable...
-		int newRow = Utils::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
-		int newCol = Utils::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
-		//what if it has no place to go?
-		while (newCol == col && newRow == row) {
-			newRow = Utils::BoundaryCondition(row + (rand() % 3) - 1, latticeSize);
-			newCol = Utils::BoundaryCondition(col + (rand() % 3) - 1, latticeSize);
-		}
-		std::stringstream message;
-		message << "Trying to move agent from (" << row << ", " << col << ") to (" << newRow
-			<< ", " << newCol << "). ";
-		Logger::getInstance().Log("Environment", message.str());
-		int placeToMove = lattice[newRow][newCol];
-		std::cout << placeToMove << std::endl;
-		if (!placeToMove) {
-			message << "Succesful agent move from (" << row << ", " << col << ") to (" << newRow
-				<< ", " << newCol << ").";
-			Logger::getInstance().Log("Environment", message.str());
-			lattice[newRow][newCol] = lattice[row][col];
-			lattice[row][col] = 0;
-			checkNeighbours(newRow, newCol);
-			showLattice();
-			printAgents();
-		}
+void Environment::blindAgentTurn(std::pair<int, int> agentPosition) {
+	//ToDO make it a class variable...
+	int newRow = Utils::BoundaryCondition(agentPosition.first + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+	int newCol = Utils::BoundaryCondition(agentPosition.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+	while (newCol == agentPosition.first && newRow == agentPosition.second) {
+		newRow = Utils::BoundaryCondition(agentPosition.first + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+		newCol = Utils::BoundaryCondition(agentPosition.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
 	}
+	std::pair<int, int> newPosition(newRow, newCol);
+	lattice->moveAgent(agentPosition, newPosition);
 }
 
-void Environment::checkNeighbours(const int row, const int col) {
-	std::shared_ptr<Agent> agent = agents[lattice[row][col]];
-	auto currentType = agent->getAgentType();
+void Environment::sightedAgentTurn(std::pair<int, int> agentPosition) {
+
+}
+
+void Environment::checkNeighbours(std::pair<int, int> agentPosition) {
+	int agentID = lattice->getAgent(agentPosition);
+	Enums::AgentType currentAgentType = lattice->checkAgentType(agentID);
 	double angle = 180;
 	double range = 1.01*sqrt(2);
 	std::pair<int, int> heading = std::pair(1, 1);
 	std::vector<std::pair<int, int>> neighbours = neighboursFromRange(angle, range, heading);
 	//TODO: Change becuase random_shuffle was removed from C++17 std::random_shuffle(neighbours.begin(), neighbours.end());
 	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
-		const int newRow = Utils::BoundaryCondition(row + it->first, latticeSize);
-		const int newCol = Utils::BoundaryCondition(col + it->second, latticeSize);
-		const int agentIndex = lattice[newRow][newCol];
-		if (agentIndex) {
-			auto neighbourType = agents[agentIndex]->getAgentType();
-			std::stringstream message;
-			message << "Neighbours: " << Utils::AgentTypeToString.at(currentType) << "(" << row << ", "
-				<< col << "), vs " << Utils::AgentTypeToString.at(neighbourType) << "(" << newRow<< ", " << newCol << "). ";
-			if (currentType == Enums::AgentType::Prey && neighbourType == Enums::AgentType::Prey) {
-				message << "Preys are mating";
-				//create new prey
-			}
-			else if (currentType == Enums::AgentType::Predator && neighbourType == Enums::AgentType::Predator) {
-				message << "Predators are mating";
-				//creata new Predators
-				agent->changeHealth(agents[agentIndex]->getHealth());
-				lattice[newRow][newCol] = 0;
-			}
-			else if (currentType > neighbourType) {
-				//eat something
-				message << "May eat";
-				agent->changeHealth(agents[agentIndex]->getHealth());
-				lattice[newRow][newCol] = 0;
-			}
-			Logger::getInstance().Log("Environment", message.str());
+		const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
+		const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
+		int neighbourAgentID = lattice->getAgent(agentPosition);
+		Enums::AgentType neighbourAgentType = lattice->checkAgentType(agentID);
+		if (currentAgentType == Enums::AgentType::Prey && neighbourAgentType == Enums::AgentType::Prey) {
+			// << "Preys are mating";
+			//create new prey
+			break;
+		}
+		else if (currentAgentType == Enums::AgentType::Predator && neighbourAgentType == Enums::AgentType::Predator) {
+			// "Predators are mating";
+			//creata new Predators
+			break;
+		}
+		else if (currentAgentType > neighbourAgentType) {
+			//eat something
+			// "May eat";
 			break;
 		}
 	}
-	std::cout << std::endl;
 }
 
 std::vector<std::pair<int, int>> Environment::neighboursFromRange(const double visionAngle,
@@ -150,6 +96,7 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(const double v
 	for (int i = -range; i <= range; i++) {
 		for (int j = -range; j <= range; j++) {
 			if (j != 0 || i != 0) {
+				//make it simpler
 				dot = static_cast <double> (heading_.first * heading_.second + j * i); // dot product between[x1, y1] and [x2, y2]
 				det = static_cast <double> (heading_.first * j - heading_.second * i); //x1 * y2 - y1 * x2      # determinant
 				angle = atan2(det, dot);
@@ -164,16 +111,4 @@ std::vector<std::pair<int, int>> Environment::neighboursFromRange(const double v
 	}
 	Logger::getInstance().Log("Neighbours", message.str());
 	return neighbours;
-}
-
-
-
-
-void Environment::showLattice() {
-	for (int i = 0; i < latticeSize; ++i) {
-		for (int j = 0; j < latticeSize; ++j) {
-			std::cout << lattice[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
 }

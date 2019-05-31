@@ -3,7 +3,7 @@
 #include <vector>
 #include "Enums.h"
 #include <map>
-#include "Interfaces/Agent.h"
+#include "Interfaces/IAgent.h"
 #include <memory>
 #include "AgentFactory.h"
 
