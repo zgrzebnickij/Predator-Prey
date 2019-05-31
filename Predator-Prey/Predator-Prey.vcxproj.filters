@@ -77,11 +77,17 @@
     <ClInclude Include="Environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Interfaces\Agent.h">
-      <Filter>Header Files\Interfaces</Filter>
+    <ClInclude Include="Predator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AgentFactory.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\IAgent.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

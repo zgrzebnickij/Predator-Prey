@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClInclude Include="AgentFactory.h" />
     <ClInclude Include="Enums.h" />
-    <ClInclude Include="Interfaces\Agent.h" />
+    <ClInclude Include="Interfaces\IAgent.h" />
     <ClInclude Include="Interfaces\ILattice.h" />
     <ClInclude Include="Lattice.h" />
     <ClInclude Include="ModelGUI.h" />

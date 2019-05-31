@@ -1,10 +1,11 @@
 #pragma once
-#include "Interfaces/Agent.h"
-
+#include "Interfaces/IAgent.h"
 
 class Predator : public Agent
 {
 public:
 	Predator(int ID_);
+	~Predator();
+	void updateHealth() override;
 };
 
