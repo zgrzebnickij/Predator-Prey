@@ -4,7 +4,7 @@
 class Predator : public Agent
 {
 public:
-	Predator(int ID, int initialHealth);
+	Predator(int ID_);
 	~Predator();
 	void updateHealth() override;
 };

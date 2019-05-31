@@ -17,7 +17,7 @@ namespace Utils
 
 
 	inline boost::unordered_map<Enums::AgentType, const char*> AgentTypeToString = boost::assign::map_list_of
-		(Enums::AgentType::Grass, "Grass")
+		(Enums::AgentType::Field, "Field")
 		(Enums::AgentType::Prey, "Prey")
 		(Enums::AgentType::Predator, "Predator");
 
@@ -27,20 +27,22 @@ namespace Utils
 	}
 
 	static int max = 0;
-	static std::stack<int> freeIds;
+	static std::stack<int> freeIDs;
 
-	inline int getfreeId() {
-		
-		if (freeIds.empty()) {
+	inline int getFreeID() {
+		if (freeIDs.empty()) {
 			max++;
 			return max;
 		}
-		int id = freeIds.top();
-		freeIds.pop();
-		return id;
+
+		const int ID = freeIDs.top();
+		freeIDs.pop();
+
+		return ID;
 	}
-	inline void addIdToStack(int id) {
-		freeIds.push(id);
+
+	inline void addIDToStack(const int ID) {
+		freeIDs.push(ID);
 	}
 }
 

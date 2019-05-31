@@ -1,9 +1,9 @@
 #include "Prey.h"
 
-
-//TODO: Add minimal health needed to reproduce
-Prey::Prey(const int ID) : Agent(Enums::AgentType::Prey, ID){
+Prey::Prey(const int ID_) : Agent(ID_, Enums::AgentType::Prey)
+{
 }
+
 
 void Prey::updateHealth() {
 	const int healthToAdd = 1;

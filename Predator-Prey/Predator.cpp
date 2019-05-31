@@ -1,8 +1,7 @@
 #include "Predator.h"
 
-
-Predator::Predator(const int ID, const int initialHealth) : Agent(Enums::AgentType::Predator, ID){
-	setHealth(initialHealth); 
+Predator::Predator(const int ID_) : Agent(ID_, Enums::AgentType::Predator)
+{
 }
 
 Predator::~Predator()
@@ -14,3 +13,4 @@ void Predator::updateHealth() {
 	const int healthToAdd = -1;
 	changeHealth(healthToAdd);
 }
+

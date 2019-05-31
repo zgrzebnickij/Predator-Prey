@@ -7,6 +7,8 @@ private:
 	RandomDevice(): generatorEngine(randomDevice()), distributionGenerator(0.0, 1.0) {}
 
 public:
+	using Position = std::pair<int, int>;
+
 	static RandomDevice& getInstance()
 	{
 		static RandomDevice instance;
@@ -16,6 +18,7 @@ public:
 	void operator=(RandomDevice const&) = delete;
 
 	int getRandomInteger(int range);
+	Position getRandomPosition(int range);
 	double getProbability();
 
 private:

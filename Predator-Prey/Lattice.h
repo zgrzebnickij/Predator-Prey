@@ -2,25 +2,39 @@
 #include "Interfaces/ILattice.h"
 #include <vector>
 #include "Enums.h"
+#include <map>
+#include "Interfaces/Agent.h"
+#include <memory>
+#include "AgentFactory.h"
 
 class Lattice : public ILattice
 {
 public:
 	using Matrix = std::vector<std::vector<int>>;
+	using AgentVec = std::vector<std::unique_ptr<Agent>>;
+	using QuantityMap = std::map<Enums::AgentType, int>;
+	using Position = std::pair<int, int>;
 
-	Lattice(int latticeSize_);
+	Lattice(int latticeSize_, QuantityMap& agentsQuantity_);
 
-	Matrix getLattice() const override;
-	int getAgent(std::pair<int, int> position) override;
-	void spawnAgent(std::pair<int, int> position, Enums::AgentType agentType) override;
-	void moveAgent(std::pair<int, int> origin, std::pair<int, int> destination) override;
-	void killAgent(std::pair<int, int> position) override;
+	Matrix* getLattice() override;
+	int getAgent(Position position) override;
+	void spawnAgent(Position position, int agentID, Enums::AgentType agentType) override;
+	void moveAgent(Position origin, Position destination) override;
+	void killAgent(Position position) override;
+	Enums::AgentType checkAgentType(int ID) override;
 
 private:
 	void generateLattice();
-	void changeAgent(std::pair<int, int> position, Enums::AgentType agent_type);
+	void spawnAgents();
+	void changeAgentOnLattice(Position position, int agentID);
+	Position generatePosition();
 
-	Matrix				latticeMap;
-	int					latticeSize;
+	int				latticeSize;
+	Matrix			latticeMap;
+	QuantityMap		agentsQuantity;
+	AgentVec		agentsVec;
+
+	AgentFactory	factory;
 };
 
