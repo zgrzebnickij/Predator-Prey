@@ -9,19 +9,18 @@
 class Environment
 {
 public:
-	using Position = std::pair<int, int>;
-
 	Environment(int lattSize, bool blindAgents_ = true);
 	void nextStep();
-	void blindAgentTurn(Position);
-	void sightedAgentTurn(Position);
-	void checkNeighbours(Position);
+	void blindAgentTurn(std::pair<int, int> agentPosition);
+	void sightedAgentTurn(std::pair<int, int> agentPosition);
+	void checkNeighbours(std::pair<int, int> agentPosition);
+	void mating(std::pair<int, int> agentPosition);
 	std::vector<std::pair<int, int>> neighboursFromRange(const double visionAngle,
 		const double visionRange, const std::pair<int, int> heading);
 private:
 	int latticeSize;
 	bool blindAgents;
-	std::function<void(Position)> agentTurn;
+	std::shared_ptr<void(std::pair<int, int>)> agentTurn;
 	std::shared_ptr<ILattice> lattice;
 };
 

@@ -68,7 +68,7 @@ void Lattice::moveAgent(Position origin, Position destination)
 void Lattice::killAgent(Position position)
 {
 	changeAgentOnLattice(position, static_cast<int>(Enums::AgentType::Field));
-	//TODO: Usunac z wektora
+	//TODO: Usunac z wektora i zwolniæ ID
 }
 
 Enums::AgentType Lattice::checkAgentType(int ID)
