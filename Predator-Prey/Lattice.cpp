@@ -5,6 +5,7 @@
 #include "Utilities.h"
 #include <boost/format.hpp>
 #include "RandomDevice.h"
+#include <experimental/vector>
 
 
 Lattice::Lattice(int latticeSize_, QuantityMap& agentsQuantity_) :
@@ -23,7 +24,7 @@ Lattice::Matrix* Lattice::getLattice()
 	return &latticeMap;
 }
 
-int Lattice::getAgent(Position position)
+int Lattice::getAgentID(Position position)
 {
 	const auto row = Utils::BoundaryCondition(position.first, latticeSize);
 	const auto col = Utils::BoundaryCondition(position.second, latticeSize);
@@ -31,10 +32,9 @@ int Lattice::getAgent(Position position)
 }
 
 Agent* Lattice::getAgentInstance(Position position) {
-	int ID = getAgent(position);
+	int ID = getAgentID(position);
 	auto it = std::find_if(std::execution::par, agentsVec.begin(), agentsVec.end(),
 		[=](std::unique_ptr<Agent>& agent) { return agent->getID() == ID; });
-
 	if (it != agentsVec.end()) {
 		return it->get();
 	}
@@ -61,26 +61,44 @@ bool Lattice::moveAgent(Position origin, Position destination)
 		<< ", " << destCol << ").";
 	Logger::getInstance().Log("lattice", message.str());
 
-	if (getAgent(origin) == static_cast<int>(Enums::AgentType::Field)) {
+	if (getAgentID(origin) == static_cast<int>(Enums::AgentType::Field)) {
 		Logger::getInstance().Log("lattice", "\tCannot move - there is no moving creature on origin position");
 		return false;
 	}
 		
-	if (getAgent(destination) != static_cast<int>(Enums::AgentType::Field)) {
+	if (getAgentID(destination) != static_cast<int>(Enums::AgentType::Field)) {
 		Logger::getInstance().Log("lattice", "\tCannot move - destination position is occupied");
 		return false;
 	}
 
-	latticeMap[destRow][destCol] = static_cast<int>(getAgent(origin));
+	latticeMap[destRow][destCol] = static_cast<int>(getAgentID(origin));
 	latticeMap[originRow][originCol] = static_cast<int>(Enums::AgentType::Field);
 	Logger::getInstance().Log("lattice", "\tMoved succesfully");
+
 	return true;
 }
 
 void Lattice::killAgent(Position position)
 {
+	/*int positionID = getAgentID(position);
+	std::experimental::erase_if(agentsVec, [this, &positionID](auto const& agent) { 
+		auto agentID = agent->getID();
+		if (positionID == agentID) {
+			Utils::addIDToStack(agentID);
+			return true;
+		}
+		return false;
+	});
+	agentsVec.erase(std::remove_if(agentsVec.begin(), agentsVec.end(), [this, &position](std::unique_ptr<Agent>& agent) {
+		auto agentID = agent->getID();
+		if (getAgentID(position) == agentID) {
+			Utils::addIDToStack(agentID);
+			return true;
+		}
+		return false;
+	}), agentsVec.end());*/
+
 	changeAgentOnLattice(position, static_cast<int>(Enums::AgentType::Field));
-	//TODO: Usunac z wektora i zwolniæ ID
 }
 
 Enums::AgentType Lattice::checkAgentType(int ID)
@@ -134,8 +152,7 @@ void Lattice::changeAgentOnLattice(Position position, int agentID)
 Lattice::Position Lattice::generatePosition()
 {
 	Position position;
-	do
-	{
+	do {
 		position = RandomDevice::getInstance().getRandomPosition(latticeSize);
 	} while (latticeMap[position.first][position.second] != 0);
 

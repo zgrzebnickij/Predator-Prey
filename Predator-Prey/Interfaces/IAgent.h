@@ -6,29 +6,38 @@
 
 class Agent{
 public:
+	using Heading = std::pair<int, int>;
+	using Callback = std::function<void(int)>;
+	using AgentType = Enums::AgentType;
+
 	Agent(const int ID_, const Enums::AgentType agentType_) : ID(ID_), agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
 	virtual ~Agent() = default;
 
-	Enums::AgentType getAgentType() const { return agentType; }
+	int getID() const { return ID; }
+	AgentType getAgentType() const { return agentType; }
+	void kill(Callback function) { function(ID); }
+
 	void setHealth(const int healthToSet) { health = healthToSet; }
 	int getHealth() const { return health; }
-	int getID() const { return ID; }
+	void changeHealth(const int healthToAdd) { health += healthToAdd; }
+	virtual void updateHealth() = 0;
+
 	void setVisionDistance(const double distance) { visionDistance = distance; }
 	double getVisionDistance() const { return visionDistance; }
+
 	void setVisionAngle(const int angle) { visionAngle = angle; }
 	int getVisionAngle() const { return visionAngle; }
-	void setHeading(std::pair<int, int> newHeading) { heading = newHeading; }
-	std::pair<int, int> getHeading() const { return heading; }
-	void kill(std::function<void(int)> function) { function(ID); }
-	virtual void updateHealth() = 0;
-	void changeHealth(const int healthToAdd) { health += healthToAdd; }
+
+	void setHeading(Heading newHeading) { heading = newHeading; }
+	Heading getHeading() const { return heading; }
+
 
 private:
-	Enums::AgentType agentType;
-	const int ID;
-	int health;
-	double visionDistance;
-	int visionAngle;
-	std::pair<int, int> heading;
+	const int               ID;
+	AgentType               agentType;
+	int                     health;
+	double                  visionDistance;
+	int                     visionAngle;
+	Heading                 heading;
 };
 

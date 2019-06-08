@@ -1,62 +1,41 @@
-#include <iostream>
 #include "Environment.h"
-#include "Prey.h"
-#include "Predator.h"
-#include <cassert>
 #include "Logger.h"
-#include <boost/numeric/ublas/vector.hpp>
-#include "Lattice.h"
 #include "RandomDevice.h"
 #include "ModelGUI.h"
-//TODO change that for RandomDevice class
-#include <ctime>   
-#include <cstdlib>
-#include <map>
 #include "Utilities.h"
+#include <map>
 #include <algorithm>
+#include <iostream>
 
 
-
-
-Environment::Environment(int latteSize_, bool blindAgents_) :
+Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	latticeSize(latteSize_),
-	blindAgents(blindAgents_)
+	blindAgents(blindAgents_),
+	qMap(qMap_),
+	lattice(new Lattice(latticeSize, qMap))
 {
-	std::map<std::string, int> foodChain;
-	std::map<Enums::AgentType, int> qMap;
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, 5));
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 10));
-
-	std::shared_ptr<ILattice> lattice1(new Lattice(latticeSize, qMap));
-	lattice = lattice1;
+	//TODO: Move to header
+	FoodChain foodChain;
 	ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
 		800, 1200, 800);
+
+	system("PAUSE");
+
+	//TODO: Change true for some condition - we don't want infinite loop
 	while (true)
 	{
 		nextStep();
-		//TOOD: make it function
-		for (int i=0; i < latticeSize; i++) {
-			for (int j=0; j < latticeSize; j++) {
-				std::pair<int, int> position(i, j);
-				Agent* currentAgent = lattice->getAgentInstance(position);
-				if (currentAgent == nullptr) {
-					continue;
-				}
-				currentAgent->updateHealth();
-				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= -10) {
-					lattice->killAgent(position);
-				}
-			}
-		}
-		system("PAUSE");
+		finishTurn();
 	}
 }
 
 
 void Environment::nextStep() {
 	for (int i = 0; i < latticeSize*latticeSize; i++) {
-		std::pair<int, int> position(RandomDevice::getInstance().getRandomPosition(latticeSize));
-		if (lattice->getAgent(position)) {
+		Position position(RandomDevice::getInstance().getRandomPosition(latticeSize));
+
+		if (lattice->getAgentID(position)) {
+			//TODO: Change for map
 			if (blindAgents) {
 				blindAgentTurn(position);
 			}
@@ -67,27 +46,50 @@ void Environment::nextStep() {
 	}
 }
 
-void Environment::blindAgentTurn(std::pair<int, int> agentPosition) {
-	//ToDO make it a class variable...
-	int newRow = Utils::BoundaryCondition(agentPosition.first + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
-	int newCol = Utils::BoundaryCondition(agentPosition.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
-	while (newCol == agentPosition.first && newRow == agentPosition.second) {
-		newRow = Utils::BoundaryCondition(agentPosition.first + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
-		newCol = Utils::BoundaryCondition(agentPosition.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+void Environment::finishTurn()
+{
+	for (int i = 0; i < latticeSize; i++) {
+		for (int j = 0; j < latticeSize; j++) {
+			//TODO: Bedzie zabawa z ownership of pointer
+			if (lattice->getAgentID(Position(i, j))) {
+				Agent* currentAgent = lattice->getAgentInstance(Position(i, j));
+				currentAgent->updateHealth();
+				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= -10) {
+					std::cout << "EKSTERMINACJA WILKA NA (" << i << ", " << j << ")!!!" << std::endl;
+					lattice->killAgent(Position(i, j));
+				}
+			}
+		}
 	}
-	std::pair<int, int> newPosition(newRow, newCol);
+}
+
+Environment::Position Environment::generateMovePosition(Position position)
+{
+	int newRow(-1), newCol(-1);
+
+	do {
+		newRow = Utils::BoundaryCondition(position.first + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+		newCol = Utils::BoundaryCondition(position.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
+	} while (newCol == position.first && newRow == position.second);
+
+	return Position(newRow, newCol);
+}
+
+void Environment::blindAgentTurn(Position agentPosition) {
+	Position newPosition = generateMovePosition(agentPosition);
+	
 	if (lattice->moveAgent(agentPosition, newPosition)) {
-		checkNeighbours(newPosition);
+		//TODO: Not checked yet. Struggling with killAgent
+		//checkNeighbours(newPosition);
 	}
-	system("PAUSE");
 }
 
-void Environment::sightedAgentTurn(std::pair<int, int> agentPosition) {
+void Environment::sightedAgentTurn(Position agentPosition) {
 
 }
 
-void Environment::checkNeighbours(std::pair<int, int> agentPosition) {
-	int agentID = lattice->getAgent(agentPosition);
+void Environment::checkNeighbours(Position agentPosition) {
+	int agentID = lattice->getAgentID(agentPosition);
 	Enums::AgentType currentAgentType = lattice->checkAgentType(agentID);
 	double angle = 180;
 	double range = 1.01*sqrt(2);
@@ -99,7 +101,7 @@ void Environment::checkNeighbours(std::pair<int, int> agentPosition) {
 		const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
 		std::cout << newRow << "-" << newCol << std::endl;
 		std::pair<int, int> neighbourPosition(newRow, newCol);
-		int neighbourAgentID = lattice->getAgent(neighbourPosition);
+		int neighbourAgentID = lattice->getAgentID(neighbourPosition);
 		Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
 		if (currentAgentType == Enums::AgentType::Prey && neighbourAgentType == Enums::AgentType::Prey) {
 			// << "Preys are mating";
@@ -129,8 +131,8 @@ void Environment::checkNeighbours(std::pair<int, int> agentPosition) {
 	}
 }
 
-void Environment::mating(std::pair<int, int> agentPosition) {
-	int agentID = lattice->getAgent(agentPosition);
+void Environment::mating(Position agentPosition) {
+	int agentID = lattice->getAgentID(agentPosition);
 	Enums::AgentType currentAgentType = lattice->checkAgentType(agentID);
 	double angle = 180;
 	double range = 1.01*sqrt(2);
@@ -140,7 +142,7 @@ void Environment::mating(std::pair<int, int> agentPosition) {
 		const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
 		const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
 		std::pair<int, int> newbornPosition(newRow, newCol);
-		int tiletype = lattice->getAgent(newbornPosition);
+		int tiletype = lattice->getAgentID(newbornPosition);
 		if (tiletype == static_cast<int>(Enums::AgentType::Field) || tiletype == static_cast<int>(Enums::AgentType::Unknown)) {
 			lattice->spawnAgent(newbornPosition, Utils::getFreeID(), currentAgentType);
 			break;
@@ -148,21 +150,22 @@ void Environment::mating(std::pair<int, int> agentPosition) {
 	}
 }
 
-std::vector<std::pair<int, int>> Environment::neighboursFromRange(const double visionAngle,
-	const double visionRange, const std::pair<int, int> heading_) {
+Environment::PositionsVec Environment::neighboursFromRange(const double visionAngle,
+	const double visionRange, const Heading heading) {
 	std::stringstream message;
-	message << "neighours for (angle, range, heading):("<< visionAngle << ", "<<visionRange << ", (" 
-		<< heading_.first << ", " << heading_.second<< "). ";
+	message << "Checking neighours for (angle, range, heading):("<< visionAngle << ", "<<visionRange << ", (" 
+		<< heading.first << ", " << heading.second<< "). ";
 	
-	std::vector<std::pair<int, int>> neighbours;
-	int range = static_cast <int> (std::floor(visionRange));;
+	PositionsVec neighbours;
+	int range = static_cast<int>(std::floor(visionRange));
 	double dot, det, angle, distance;
+
 	for (int i = -range; i <= range; i++) {
 		for (int j = -range; j <= range; j++) {
 			if (j != 0 || i != 0) {
 				//make it simpler
-				dot = static_cast <double> (heading_.first * heading_.second + j * i); // dot product between[x1, y1] and [x2, y2]
-				det = static_cast <double> (heading_.first * j - heading_.second * i); //x1 * y2 - y1 * x2      # determinant
+				dot = static_cast <double> (heading.first * heading.second + j * i); // dot product between[x1, y1] and [x2, y2]
+				det = static_cast <double> (heading.first * j - heading.second * i); //x1 * y2 - y1 * x2      # determinant
 				angle = atan2(det, dot);
 				distance = sqrt(i*i + j * j);
 				if ((visionAngle > abs(angle)) && (distance<visionRange)){
