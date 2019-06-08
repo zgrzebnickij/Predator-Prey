@@ -19,6 +19,7 @@ public:
 
 	Matrix* getLattice() override;
 	int getAgent(Position position) override;
+	Agent* getAgentInstance(std::pair<int, int> position) override;
 	void spawnAgent(Position position, int agentID, Enums::AgentType agentType) override;
 	bool moveAgent(Position origin, Position destination) override;
 	void killAgent(Position position) override;

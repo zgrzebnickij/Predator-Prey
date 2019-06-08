@@ -30,6 +30,17 @@ int Lattice::getAgent(Position position)
 	return latticeMap[row][col];
 }
 
+Agent* Lattice::getAgentInstance(Position position) {
+	int ID = getAgent(position);
+	auto it = std::find_if(std::execution::par, agentsVec.begin(), agentsVec.end(),
+		[=](std::unique_ptr<Agent>& agent) { return agent->getID() == ID; });
+
+	if (it != agentsVec.end()) {
+		return it->get();
+	}
+	return nullptr;
+}
+
 void Lattice::spawnAgent(Position position, int agentID, Enums::AgentType agentType)
 {
 	auto agent = factory.createAgent(agentType);

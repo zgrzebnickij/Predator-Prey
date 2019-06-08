@@ -34,6 +34,20 @@ Environment::Environment(int latteSize_, bool blindAgents_) :
 	while (true)
 	{
 		nextStep();
+		//TOOD: make it function
+		for (int i=0; i < latticeSize; i++) {
+			for (int j=0; j < latticeSize; j++) {
+				std::pair<int, int> position(i, j);
+				Agent* currentAgent = lattice->getAgentInstance(position);
+				if (currentAgent == nullptr) {
+					continue;
+				}
+				currentAgent->updateHealth();
+				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= -10) {
+					lattice->killAgent(position);
+				}
+			}
+		}
 		system("PAUSE");
 	}
 }
