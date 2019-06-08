@@ -37,7 +37,7 @@ void Lattice::spawnAgent(Position position, int agentID, Enums::AgentType agentT
 	agentsVec.push_back(std::move(agent));
 }
 
-void Lattice::moveAgent(Position origin, Position destination)
+bool Lattice::moveAgent(Position origin, Position destination)
 {
 	//TODO: CHECK
 	const auto originRow = Utils::BoundaryCondition(origin.first, latticeSize);
@@ -52,17 +52,18 @@ void Lattice::moveAgent(Position origin, Position destination)
 
 	if (getAgent(origin) == static_cast<int>(Enums::AgentType::Field)) {
 		Logger::getInstance().Log("lattice", "\tCannot move - there is no moving creature on origin position");
-		return;
+		return false;
 	}
 		
 	if (getAgent(destination) != static_cast<int>(Enums::AgentType::Field)) {
 		Logger::getInstance().Log("lattice", "\tCannot move - destination position is occupied");
-		return;
+		return false;
 	}
 
 	latticeMap[destRow][destCol] = static_cast<int>(getAgent(origin));
 	latticeMap[originRow][originCol] = static_cast<int>(Enums::AgentType::Field);
 	Logger::getInstance().Log("lattice", "\tMoved succesfully");
+	return true;
 }
 
 void Lattice::killAgent(Position position)

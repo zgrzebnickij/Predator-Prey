@@ -25,7 +25,7 @@ Environment::Environment(int latteSize_, bool blindAgents_) :
 	std::map<std::string, int> foodChain;
 	std::map<Enums::AgentType, int> qMap;
 	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, 5));
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 5));
+	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 10));
 
 	std::shared_ptr<ILattice> lattice1(new Lattice(latticeSize, qMap));
 	lattice = lattice1;
@@ -62,8 +62,9 @@ void Environment::blindAgentTurn(std::pair<int, int> agentPosition) {
 		newCol = Utils::BoundaryCondition(agentPosition.second + (RandomDevice::getInstance().getRandomInteger(3) - 1), latticeSize);
 	}
 	std::pair<int, int> newPosition(newRow, newCol);
-	lattice->moveAgent(agentPosition, newPosition);
-	checkNeighbours(newPosition);
+	if (lattice->moveAgent(agentPosition, newPosition)) {
+		checkNeighbours(newPosition);
+	}
 	system("PAUSE");
 }
 
