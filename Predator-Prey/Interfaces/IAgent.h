@@ -10,7 +10,7 @@ public:
 	using Callback = std::function<void(int)>;
 	using AgentType = Enums::AgentType;
 
-	Agent(const int ID_, const Enums::AgentType agentType_) : ID(ID_), agentType(agentType_), health(0), visionDistance(0), visionAngle(180) {}
+	Agent(const int ID_, const Enums::AgentType agentType_, const int initialHealth=0) : ID(ID_), agentType(agentType_), health(initialHealth), visionDistance(0), visionAngle(180) {}
 	virtual ~Agent() = default;
 
 	int getID() const { return ID; }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Interfaces/IAgent.h"
 #include "Lattice.h"
+#include "ModelGUI.h"
 #include <vector>
 #include <string>
 #include <functional>
@@ -9,12 +10,6 @@
 class Environment
 {
 public:
-	/* 
-	*  For Kuba's reviev: Zrobi³em dwa aliasy prowadz¹ce do identycznych typów, ¿eby mo¿na by³o:
-	*   a) ³atwiej i czytelniej u¿ywaæ
-	*   b) rozró¿niæ do czego odnosi siê dany typ
-	*  Usuñ ten komentarz jak go przecztasz
-	*/
 	using Position = std::pair<int, int>;
 	using Heading = std::pair<int, int>;
 	using PositionsVec = std::vector<Position>;
@@ -35,6 +30,8 @@ public:
 	void finishTurn();
 	Position generateMovePosition(Position position);
 private:
+	int preyHelthToMate;
+	int predatorMaxHealth;
 	int latticeSize;
 	bool blindAgents;
 	QuantityMap qMap;

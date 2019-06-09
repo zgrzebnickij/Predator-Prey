@@ -12,7 +12,9 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_),
 	qMap(qMap_),
-	lattice(new Lattice(latticeSize, qMap))
+	lattice(new Lattice(latticeSize, qMap)),
+	predatorMaxHealth(20),
+	preyHelthToMate(4)
 {
 	//TODO: Move to header
 	FoodChain foodChain;
@@ -54,7 +56,7 @@ void Environment::finishTurn()
 			if (lattice->getAgentID(Position(i, j))) {
 				Agent* currentAgent = lattice->getAgentInstance(Position(i, j));
 				currentAgent->updateHealth();
-				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= -10) {
+				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= 0) {
 					std::cout << "EKSTERMINACJA WILKA NA (" << i << ", " << j << ")!!!" << std::endl;
 					lattice->killAgent(Position(i, j));
 				}
@@ -80,7 +82,7 @@ void Environment::blindAgentTurn(Position agentPosition) {
 	
 	if (lattice->moveAgent(agentPosition, newPosition)) {
 		//TODO: Not checked yet. Struggling with killAgent
-		//checkNeighbours(newPosition);
+		checkNeighbours(newPosition);
 	}
 }
 
@@ -106,7 +108,9 @@ void Environment::checkNeighbours(Position agentPosition) {
 		if (currentAgentType == Enums::AgentType::Prey && neighbourAgentType == Enums::AgentType::Prey) {
 			// << "Preys are mating";
 			std::cout << "prey mating" << std::endl;
-			mating(agentPosition);
+			if (lattice->getAgentInstance(agentPosition)->getHealth() > preyHelthToMate) {
+				mating(agentPosition);
+			}
 			//create new prey
 			break;
 		}
@@ -114,12 +118,17 @@ void Environment::checkNeighbours(Position agentPosition) {
 			// "Predators are mating";
 			std::cout << "pred mating" << std::endl;
 			mating(agentPosition);
+			lattice->getAgentInstance(agentPosition)->setHealth(0);
 			//creata new Predators
 			break;
 		}
 		else if (currentAgentType > neighbourAgentType && static_cast<int>(neighbourAgentType)!=3) {
 			//eat something
 			std::cout << "eating" << std::endl;
+			if (lattice->getAgentInstance(agentPosition)->getHealth() < predatorMaxHealth) {
+				int preyHealth = lattice->getAgentInstance(neighbourPosition)->getHealth();
+				lattice->getAgentInstance(agentPosition)->changeHealth(preyHealth);
+			}
 			lattice->killAgent(neighbourPosition);
 			// "May eat"; 
 			break;
@@ -145,6 +154,10 @@ void Environment::mating(Position agentPosition) {
 		int tiletype = lattice->getAgentID(newbornPosition);
 		if (tiletype == static_cast<int>(Enums::AgentType::Field) || tiletype == static_cast<int>(Enums::AgentType::Unknown)) {
 			lattice->spawnAgent(newbornPosition, Utils::getFreeID(), currentAgentType);
+			if (currentAgentType == Enums::AgentType::Predator) {
+				int parentHealth = lattice->getAgentInstance(agentPosition)->getHealth();
+				lattice->getAgentInstance(newbornPosition)->setHealth(parentHealth);
+			}
 			break;
 		}
 	}
