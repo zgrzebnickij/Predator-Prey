@@ -14,9 +14,11 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	qMap(qMap_),
 	lattice(new Lattice(latticeSize, qMap)),
 	predatorMaxHealth(20),
-	preyHelthToMate(4)
+	preyHelthToMate(4),
+	numberOfIterations(100)
 {
 	//TODO: Move to header
+
 	FoodChain foodChain;
 	ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
 		800, 1200, 800);
@@ -24,7 +26,7 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	system("PAUSE");
 
 	//TODO: Change true for some condition - we don't want infinite loop
-	while (true)
+	for(int i = 0;i<numberOfIterations;i++)
 	{
 		nextStep();
 		finishTurn();
@@ -37,7 +39,7 @@ void Environment::nextStep() {
 		Position position(RandomDevice::getInstance().getRandomPosition(latticeSize));
 
 		if (lattice->getAgentID(position)) {
-			//TODO: Change for map
+			//TODO: próbawa³em to zrobiæ ale nie wiem jak. Coœ pl¹cze ztypami danych
 			if (blindAgents) {
 				blindAgentTurn(position);
 			}
@@ -80,9 +82,12 @@ Environment::Position Environment::generateMovePosition(Position position)
 void Environment::blindAgentTurn(Position agentPosition) {
 	Position newPosition = generateMovePosition(agentPosition);
 	
-	if (lattice->moveAgent(agentPosition, newPosition)) {
+	if(lattice->moveAgent(agentPosition, newPosition)) {
 		//TODO: Not checked yet. Struggling with killAgent
 		checkNeighbours(newPosition);
+	}
+	else {
+		checkNeighbours(agentPosition);
 	}
 }
 
@@ -116,9 +121,10 @@ void Environment::checkNeighbours(Position agentPosition) {
 		}
 		else if (currentAgentType == Enums::AgentType::Predator && neighbourAgentType == Enums::AgentType::Predator) {
 			// "Predators are mating";
-			std::cout << "pred mating" << std::endl;
+			//w³asciwie to w naszych za³o¿eniach predator rozmana¿a siê po zjedzeniu ofiary
 			mating(agentPosition);
 			lattice->getAgentInstance(agentPosition)->setHealth(0);
+			std::cout << "pred mating" << std::endl;
 			//creata new Predators
 			break;
 		}
@@ -130,6 +136,8 @@ void Environment::checkNeighbours(Position agentPosition) {
 				lattice->getAgentInstance(agentPosition)->changeHealth(preyHealth);
 			}
 			lattice->killAgent(neighbourPosition);
+			//tu powinno rozman¿anie
+			
 			// "May eat"; 
 			break;
 		}

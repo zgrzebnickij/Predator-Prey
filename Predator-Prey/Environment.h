@@ -30,6 +30,7 @@ public:
 	void finishTurn();
 	Position generateMovePosition(Position position);
 private:
+	int numberOfIterations;
 	int preyHelthToMate;
 	int predatorMaxHealth;
 	int latticeSize;

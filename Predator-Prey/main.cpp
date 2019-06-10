@@ -5,7 +5,7 @@ int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
 	std::map<Enums::AgentType, int> qMap;
 	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, 10));
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 15));
+	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 30));
 	auto env = Environment(15, qMap);
 	system("PAUSE");
 
