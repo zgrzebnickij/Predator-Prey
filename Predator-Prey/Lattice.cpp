@@ -6,6 +6,7 @@
 #include <boost/format.hpp>
 #include "RandomDevice.h"
 #include <experimental/vector>
+#include <mutex>
 
 
 Lattice::Lattice(int latticeSize_, QuantityMap& agentsQuantity_) :
@@ -33,6 +34,8 @@ int Lattice::getAgentID(Position position)
 
 Agent* Lattice::getAgentInstance(Position position) {
 	int ID = getAgentID(position);
+
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	auto it = std::find_if(std::execution::par, agentsVec.begin(), agentsVec.end(),
 		[=](std::unique_ptr<Agent>& agent) { return agent->getID() == ID; });
 	if (it != agentsVec.end()) {
@@ -80,7 +83,8 @@ bool Lattice::moveAgent(Position origin, Position destination)
 
 void Lattice::killAgent(Position position)
 {
-	/*int positionID = getAgentID(position);
+	int positionID = getAgentID(position);
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	std::experimental::erase_if(agentsVec, [this, &positionID](auto const& agent) { 
 		auto agentID = agent->getID();
 		if (positionID == agentID) {
@@ -89,7 +93,7 @@ void Lattice::killAgent(Position position)
 		}
 		return false;
 	});
-	agentsVec.erase(std::remove_if(agentsVec.begin(), agentsVec.end(), [this, &position](std::unique_ptr<Agent>& agent) {
+	/*agentsVec.erase(std::remove_if(agentsVec.begin(), agentsVec.end(), [this, &position](std::unique_ptr<Agent>& agent) {
 		auto agentID = agent->getID();
 		if (getAgentID(position) == agentID) {
 			Utils::addIDToStack(agentID);
@@ -103,6 +107,7 @@ void Lattice::killAgent(Position position)
 
 Enums::AgentType Lattice::checkAgentType(int ID)
 {
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	auto it = std::find_if(std::execution::par, agentsVec.begin(), agentsVec.end(), 
 	[=](std::unique_ptr<Agent>& agent)	{ return agent->getID() == ID; });
 

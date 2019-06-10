@@ -6,6 +6,7 @@
 #include "Interfaces/IAgent.h"
 #include <memory>
 #include "AgentFactory.h"
+#include <mutex>
 
 class Lattice : public ILattice
 {
@@ -37,5 +38,7 @@ private:
 	AgentVec		agentsVec;
 
 	AgentFactory	factory;
+
+	std::mutex      latticeGuard;
 };
 
