@@ -13,11 +13,10 @@ public:
 	using Position = std::pair<int, int>;
 	using Heading = std::pair<int, int>;
 	using PositionsVec = std::vector<Position>;
-	using FoodChain = std::map<std::string, int>;
 	using AgentType = Enums::AgentType;
 	using QuantityMap = std::map<AgentType, int>;
 
-	Environment(int lattSize_, QuantityMap qMap_, bool blindAgents_ = true);
+	Environment(int lattSize_, QuantityMap qMap_, const int predatorMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_ = true);
 
 	void nextStep();
 
@@ -28,6 +27,7 @@ public:
 	void sightedAgentTurn(Position agentPosition);
 	void mating(Position agentPosition);
 	void finishTurn();
+	void makeIterations();
 	Position generateMovePosition(Position position);
 private:
 	int numberOfIterations;
@@ -38,5 +38,6 @@ private:
 	QuantityMap qMap;
 	std::shared_ptr<void(std::pair<int, int>)> agentTurn;
 	std::shared_ptr<ILattice> lattice;
+	std::shared_ptr<ModelGUI> gui;
 };
 

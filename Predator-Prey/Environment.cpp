@@ -6,33 +6,41 @@
 #include <map>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
 
 
-Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
+Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_):
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_),
 	qMap(qMap_),
 	lattice(new Lattice(latticeSize, qMap)),
-	predatorMaxHealth(20),
-	preyHelthToMate(4),
-	numberOfIterations(100)
+	predatorMaxHealth(predMaxHealth_),
+	preyHelthToMate(preyHelthToMate_),
+	numberOfIterations(numberOfIterations_),
+	gui(new ModelGUI(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
+		800, 1200, 800))
 {
 	//TODO: Move to header
-
-	FoodChain foodChain;
-	ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
+	/*ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
 		800, 1200, 800);
-
+	*/
 	system("PAUSE");
 
 	//TODO: Change true for some condition - we don't want infinite loop
-	for(int i = 0;i<numberOfIterations;i++)
+	/*for(int i = 0;i<numberOfIterations;i++)
+	{
+		nextStep();
+		finishTurn();
+	}*/
+}
+
+void Environment::makeIterations() {
+	for (int i = 0; i < numberOfIterations; i++)
 	{
 		nextStep();
 		finishTurn();
 	}
 }
-
 
 void Environment::nextStep() {
 	for (int i = 0; i < latticeSize*latticeSize; i++) {
@@ -58,6 +66,7 @@ void Environment::finishTurn()
 			if (lattice->getAgentID(Position(i, j))) {
 				Agent* currentAgent = lattice->getAgentInstance(Position(i, j));
 				currentAgent->updateHealth();
+				std::cout << lattice->getAgentInstance(Position(i, j))->getHealth() << std::endl;
 				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= 0) {
 					std::cout << "EKSTERMINACJA WILKA NA (" << i << ", " << j << ")!!!" << std::endl;
 					lattice->killAgent(Position(i, j));
@@ -87,7 +96,8 @@ void Environment::blindAgentTurn(Position agentPosition) {
 		checkNeighbours(newPosition);
 	}
 	else {
-		checkNeighbours(agentPosition);
+		//not sure uf it is necessery
+		//checkNeighbours(agentPosition);
 	}
 }
 
@@ -106,15 +116,15 @@ void Environment::checkNeighbours(Position agentPosition) {
 	for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
 		const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
 		const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
-		std::cout << newRow << "-" << newCol << std::endl;
 		std::pair<int, int> neighbourPosition(newRow, newCol);
 		int neighbourAgentID = lattice->getAgentID(neighbourPosition);
 		Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
 		if (currentAgentType == Enums::AgentType::Prey && neighbourAgentType == Enums::AgentType::Prey) {
 			// << "Preys are mating";
-			std::cout << "prey mating" << std::endl;
+			//std::cout << "prey mating" << std::endl;
 			if (lattice->getAgentInstance(agentPosition)->getHealth() > preyHelthToMate) {
 				mating(agentPosition);
+				lattice->getAgentInstance(agentPosition)->setHealth(0);
 			}
 			//create new prey
 			break;
@@ -123,14 +133,13 @@ void Environment::checkNeighbours(Position agentPosition) {
 			// "Predators are mating";
 			//w³asciwie to w naszych za³o¿eniach predator rozmana¿a siê po zjedzeniu ofiary
 			mating(agentPosition);
-			lattice->getAgentInstance(agentPosition)->setHealth(0);
-			std::cout << "pred mating" << std::endl;
+			//std::cout << "pred mating" << std::endl;
 			//creata new Predators
 			break;
 		}
 		else if (currentAgentType > neighbourAgentType && static_cast<int>(neighbourAgentType)!=3) {
 			//eat something
-			std::cout << "eating" << std::endl;
+			//std::cout << "eating" << std::endl;
 			if (lattice->getAgentInstance(agentPosition)->getHealth() < predatorMaxHealth) {
 				int preyHealth = lattice->getAgentInstance(neighbourPosition)->getHealth();
 				lattice->getAgentInstance(agentPosition)->changeHealth(preyHealth);
@@ -142,8 +151,8 @@ void Environment::checkNeighbours(Position agentPosition) {
 			break;
 		}
 		else {
-			std::cout << static_cast<int>(currentAgentType) << ";" << static_cast<int>(neighbourAgentType) << std::endl;
-			std::cout << "hmm" << std::endl;
+			//std::cout << static_cast<int>(currentAgentType) << ";" << static_cast<int>(neighbourAgentType) << std::endl;
+			//std::cout << "hmm" << std::endl;
 		}
 	}
 }

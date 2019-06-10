@@ -3,29 +3,15 @@
 
 int main() {
 	std::cout << "Predator-Prey Model, Agent-Based Version" << std::endl;
+	int preys = 30;
+	int predators = 10;
 	std::map<Enums::AgentType, int> qMap;
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, 10));
-	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, 15));
-	auto env = Environment(15, qMap);
-	system("PAUSE");
-
-	/*
-		
-	std::shared_ptr<ILattice> lattice(new Lattice(5, qMap));
-	ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
-	             800, 1200, 800);
-	const std::pair<int, int> position(4, 4);
-	const std::pair<int, int> position2(4, 5);
-	const std::pair<int, int> position3(4, 6);
-
-	system("PAUSE");
-	lattice->spawnAgent(position, 1, Enums::AgentType::Predator);
-	lattice->spawnAgent(position3, 2, Enums::AgentType::Prey);
-	system("PAUSE");
-	lattice->moveAgent(position, position2);
-	lattice->moveAgent(position2, position3);
-	lattice->moveAgent(position, position2);
-	system("PAUSE");
-	lattice->killAgent(position2);
-	*/
+	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, predators));
+	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, preys));
+	const int iterations = 100;
+	const int predatorMaxHealth = 4;
+	const int preyHealthToMate = 1;
+	const int sizeOfSystem = 15;
+	auto env = Environment(sizeOfSystem, qMap, predatorMaxHealth, preyHealthToMate, iterations);
+	env.makeIterations();
 }
