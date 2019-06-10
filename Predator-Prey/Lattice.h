@@ -25,6 +25,7 @@ public:
 	bool moveAgent(Position origin, Position destination) override;
 	void killAgent(Position position) override;
 	Enums::AgentType checkAgentType(int ID) override;
+	QuantityMap getAgentStatistics() override;
 
 private:
 	void generateLattice();

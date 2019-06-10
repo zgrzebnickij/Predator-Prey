@@ -12,10 +12,19 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_),
 	qMap(qMap_),
-	lattice(new Lattice(latticeSize, qMap))
+	lattice(new Lattice(latticeSize, qMap)),
+	currentStep(0)
 {
 	//TODO: Move to header
 	FoodChain foodChain;
+	stepLogFileName = std::to_string(latticeSize);
+	std::for_each(qMap.begin(), qMap.end(), [this](auto const& data) {
+		stepLogFileName += "__";
+		stepLogFileName += Utils::AgentTypeToString.at(data.first);
+		stepLogFileName += "_";
+		stepLogFileName += std::to_string(data.second);
+	});
+
 	ModelGUI gui(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
 		800, 1200, 800);
 
@@ -24,8 +33,11 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, bool blindAgents_) :
 	//TODO: Change true for some condition - we don't want infinite loop
 	while (true)
 	{
+		currentStep++;
 		nextStep();
 		finishTurn();
+		Logger::getInstance().LogStep(lattice->getAgentStatistics(), stepLogFileName, currentStep);
+		//system("PAUSE");
 	}
 }
 

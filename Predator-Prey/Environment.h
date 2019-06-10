@@ -36,9 +36,11 @@ public:
 	Position generateMovePosition(Position position);
 private:
 	int latticeSize;
+	int currentStep;
 	bool blindAgents;
 	QuantityMap qMap;
 	std::shared_ptr<void(std::pair<int, int>)> agentTurn;
 	std::shared_ptr<ILattice> lattice;
+	std::string stepLogFileName;
 };
 

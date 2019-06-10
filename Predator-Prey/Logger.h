@@ -1,10 +1,13 @@
 #pragma once
 #include <string>
 #include <experimental/filesystem>
+#include <map>
+#include "Enums.h"
 
 class Logger
 {
 private:
+	using QuantityMap = std::map<Enums::AgentType, int>;
 	Logger()
 	{
 		namespace fs = std::experimental::filesystem;
@@ -26,5 +29,6 @@ public:
 	void operator=(Logger const&) = delete;
 
 	void Log(const std::string& fileName, std::string message);
+	void LogStep(QuantityMap statisticMap, const std::string& fileName, int step);
 };
 

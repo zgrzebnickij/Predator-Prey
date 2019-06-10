@@ -93,15 +93,6 @@ void Lattice::killAgent(Position position)
 		}
 		return false;
 	});
-	/*agentsVec.erase(std::remove_if(agentsVec.begin(), agentsVec.end(), [this, &position](std::unique_ptr<Agent>& agent) {
-		auto agentID = agent->getID();
-		if (getAgentID(position) == agentID) {
-			Utils::addIDToStack(agentID);
-			return true;
-		}
-		return false;
-	}), agentsVec.end());*/
-
 	changeAgentOnLattice(position, static_cast<int>(Enums::AgentType::Field));
 }
 
@@ -115,6 +106,21 @@ Enums::AgentType Lattice::checkAgentType(int ID)
 		return it->get()->getAgentType();
 	}
 	return Enums::AgentType::Unknown;
+}
+
+Lattice::QuantityMap Lattice::getAgentStatistics()
+{
+	QuantityMap statisticMap;
+	for (auto i = 1; i < static_cast<int>(Enums::AgentType::Unknown); i++) {
+		statisticMap.insert(std::make_pair<Enums::AgentType, int>(static_cast<Enums::AgentType>(i), 0));
+	}
+
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
+	std::for_each(agentsVec.begin(), agentsVec.end(), [&statisticMap](auto const& agent) {
+		statisticMap[agent->getAgentType()] = statisticMap[agent->getAgentType()] + 1;
+	});
+
+	return statisticMap;
 }
 
 void Lattice::generateLattice()
