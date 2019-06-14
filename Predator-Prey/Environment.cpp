@@ -17,6 +17,9 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHea
 	predatorMaxHealth(predMaxHealth_),
 	preyHelthToMate(preyHelthToMate_),
 	numberOfIterations(numberOfIterations_),
+	preyMatingProb(0.4),
+	predatorMatingProb(0.2),
+    preyMaxHealth(150),
 	gui(new ModelGUI(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
 		800, 1200, 800))
 {
@@ -49,9 +52,11 @@ void Environment::nextStep() {
 		if (lattice->getAgentID(position)) {
 			//TODO: próbawa³em to zrobiæ ale nie wiem jak. Coœ pl¹cze ztypami danych
 			if (blindAgents) {
+				//this is our version when we need meeting to mate
 				blindAgentTurn(position);
 			}
 			else {
+				//this is version from some papers 
 				sightedAgentTurn(position);
 			}
 		}
@@ -66,9 +71,12 @@ void Environment::finishTurn()
 			if (lattice->getAgentID(Position(i, j))) {
 				Agent* currentAgent = lattice->getAgentInstance(Position(i, j));
 				currentAgent->updateHealth();
-				std::cout << lattice->getAgentInstance(Position(i, j))->getHealth() << std::endl;
+				//std::cout << lattice->getAgentInstance(Position(i, j))->getHealth() << std::endl;
 				if (currentAgent->getAgentType() == Enums::AgentType::Predator && currentAgent->getHealth() <= 0) {
-					std::cout << "EKSTERMINACJA WILKA NA (" << i << ", " << j << ")!!!" << std::endl;
+					//std::cout << "EKSTERMINACJA WILKA NA (" << i << ", " << j << ")!!!" << std::endl;
+					lattice->killAgent(Position(i, j));
+				}
+				else if (currentAgent->getAgentType() == Enums::AgentType::Prey && currentAgent->getHealth() >= preyMaxHealth) {
 					lattice->killAgent(Position(i, j));
 				}
 			}
@@ -102,7 +110,82 @@ void Environment::blindAgentTurn(Position agentPosition) {
 }
 
 void Environment::sightedAgentTurn(Position agentPosition) {
-
+	int agentID = lattice->getAgentID(agentPosition);
+	Enums::AgentType agentType = lattice->checkAgentType(agentID);
+	double angle = 180;
+	double range = 1.01*sqrt(2);
+	std::pair<int, int> heading = std::pair(1, 1);
+	if (agentType == Enums::AgentType::Prey) {
+		//move
+		Position newPosition = generateMovePosition(agentPosition);
+		if (lattice->moveAgent(agentPosition, newPosition)) {
+			agentPosition = newPosition;
+		}
+		//mate with some prob
+		if (RandomDevice::getInstance().getProbability()<preyMatingProb) {
+			std::vector<std::pair<int, int>> neighbours = neighboursFromRange(angle, range, heading);
+			for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
+				const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
+				const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
+				std::pair<int, int> neighbourPosition(newRow, newCol);
+				int neighbourAgentID = lattice->getAgentID(neighbourPosition);
+				Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
+				if (neighbourAgentType == Enums::AgentType::Field || neighbourAgentType == Enums::AgentType::Unknown) {
+					lattice->spawnAgent(neighbourPosition, Utils::getFreeID(), agentType);
+					break;
+				}
+			}
+		}
+	}
+	else {
+		//predator
+		bool hunted = false;
+		std::vector<std::pair<int, int>> neighbours = neighboursFromRange(angle, range, heading);
+		for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
+			//hunt if not move
+			const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
+			const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
+			std::pair<int, int> neighbourPosition(newRow, newCol);
+			int neighbourAgentID = lattice->getAgentID(neighbourPosition);
+			Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
+			if (neighbourAgentType == Enums::AgentType::Prey) {
+				//kill
+				lattice->killAgent(neighbourPosition);
+				lattice->getAgentInstance(agentPosition)->setHealth(predatorMaxHealth);
+				hunted = true;
+				break;
+			}
+		}
+		if (!hunted) {
+			for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
+				//move
+				const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
+				const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
+				std::pair<int, int> neighbourPosition(newRow, newCol);
+				int neighbourAgentID = lattice->getAgentID(neighbourPosition);
+				Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
+				if (neighbourAgentType == Enums::AgentType::Unknown || neighbourAgentType == Enums::AgentType::Field) {
+					lattice->moveAgent(agentPosition, neighbourPosition);
+					return;
+				}
+			}
+		}
+		//mate
+		if (RandomDevice::getInstance().getProbability() < predatorMatingProb) {
+			std::vector<std::pair<int, int>> neighbours = neighboursFromRange(angle, range, heading);
+			for (std::vector<std::pair<int, int>>::iterator it = neighbours.begin(); it != neighbours.end(); ++it) {
+				const int newRow = Utils::BoundaryCondition(agentPosition.first + it->first, latticeSize);
+				const int newCol = Utils::BoundaryCondition(agentPosition.second + it->second, latticeSize);
+				std::pair<int, int> neighbourPosition(newRow, newCol);
+				int neighbourAgentID = lattice->getAgentID(neighbourPosition);
+				Enums::AgentType neighbourAgentType = lattice->checkAgentType(neighbourAgentID);
+				if (neighbourAgentType == Enums::AgentType::Field || neighbourAgentType == Enums::AgentType::Unknown) {
+					lattice->spawnAgent(neighbourPosition, Utils::getFreeID(), agentType);
+					return;
+				}
+			}
+		}
+	}
 }
 
 void Environment::checkNeighbours(Position agentPosition) {
@@ -205,6 +288,8 @@ Environment::PositionsVec Environment::neighboursFromRange(const double visionAn
 			}
 		}
 	}
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(neighbours.begin(), neighbours.end(), std::default_random_engine(seed));
 	Logger::getInstance().Log("Neighbours", message.str());
 	return neighbours;
 }

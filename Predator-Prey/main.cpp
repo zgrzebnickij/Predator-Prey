@@ -9,9 +9,9 @@ int main() {
 	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Predator, predators));
 	qMap.insert(std::pair<Enums::AgentType, int>(Enums::AgentType::Prey, preys));
 	const int iterations = 100;
-	const int predatorMaxHealth = 4;
+	const int predatorMaxHealth = 3;
 	const int preyHealthToMate = 1;
 	const int sizeOfSystem = 15;
-	auto env = Environment(sizeOfSystem, qMap, predatorMaxHealth, preyHealthToMate, iterations);
+	auto env = Environment(sizeOfSystem, qMap, predatorMaxHealth, preyHealthToMate, iterations, false);
 	env.makeIterations();
 }

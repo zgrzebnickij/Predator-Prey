@@ -30,6 +30,11 @@ public:
 	void makeIterations();
 	Position generateMovePosition(Position position);
 private:
+	//prob version
+	double preyMatingProb;
+	int preyMaxHealth;
+	double predatorMatingProb;
+	//
 	int numberOfIterations;
 	int preyHelthToMate;
 	int predatorMaxHealth;
