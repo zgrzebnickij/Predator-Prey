@@ -11,7 +11,7 @@
 
 Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_):
 	latticeSize(latteSize_),
-	blindAgents(blindAgents_),
+	customModel(blindAgents_),
 	qMap(qMap_),
 	lattice(new Lattice(latticeSize, qMap)),
 	predatorMaxHealth(predMaxHealth_),
@@ -51,7 +51,7 @@ void Environment::nextStep() {
 
 		if (lattice->getAgentID(position)) {
 			//TODO: próbawa³em to zrobiæ ale nie wiem jak. Coœ pl¹cze ztypami danych
-			if (blindAgents) {
+			if (customModel) {
 				//this is our version when we need meeting to mate
 				blindAgentTurn(position);
 			}

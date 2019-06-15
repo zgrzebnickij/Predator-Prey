@@ -44,5 +44,15 @@ namespace Utils
 	inline void addIDToStack(const int ID) {
 		freeIDs.push(ID);
 	}
+
+	struct envData //deklaracja struktury
+	{ //opis struktury
+		double preyMatingProb;
+		double predatorMatingProb;
+		int preyMaxHealth;
+		int preyHelthToMate;
+		int predatorMaxHealth;
+		bool customModel;
+	};
 }
 
