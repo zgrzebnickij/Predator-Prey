@@ -29,7 +29,10 @@ public:
 	void finishTurn();
 	void makeIterations();
 	Position generateMovePosition(Position position);
+	int getCurrentStep();
 private:
+	void toggleSimulationRun();
+
 	double preyMatingProb;
 	int preyMaxHealth;
 	double predatorMatingProb;
@@ -39,6 +42,7 @@ private:
 	int latticeSize;
 	int currentStep;
 	bool blindAgents;
+	bool isSimulationRunning;
 	std::string stepLogFileName;
 	QuantityMap qMap;
 	

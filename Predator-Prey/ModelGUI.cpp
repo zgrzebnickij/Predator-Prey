@@ -2,16 +2,20 @@
 #include "Logger.h"
 #include "Enums.h"
 #include <execution>
+#include <iostream>
 #include <TGUI/TGUI.hpp>
 
 
-ModelGUI::ModelGUI(const Matrix* matrix_, CheckTypeClbk callback, float windowHeight_, float windowWidth_, float latticeWidth_) :
+ModelGUI::ModelGUI(const Matrix* matrix_, CheckTypeClbk checkType_, float windowHeight_, float windowWidth_, float latticeWidth_, ToggleSimClbk toggleSim_,
+	CurrentStepClbk getCurrentStep_) :
 	latticeMap(matrix_),
 	scaleFactor(1.0f),
 	windowHeight(windowHeight_),
 	windowWidth(windowWidth_),
 	latticeWidth(latticeWidth_),
-	checkType(callback)
+	checkType(checkType_),
+	toggleSim(toggleSim_),
+	getCurrentStep(getCurrentStep_)
 {
 	if (!grassTexture.loadFromFile("Resources/Textures/field.png") || 
 		!wolfTexture.loadFromFile("Resources/Textures/wolf.png") || 
@@ -49,6 +53,9 @@ void ModelGUI::renderingThread()
 	tgui::Gui gui{ window };
 	window.setFramerateLimit(60);
 
+	gui.loadWidgetsFromFile("Resources/GUI/form.txt");
+	prepareWidgets(gui);
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -57,6 +64,10 @@ void ModelGUI::renderingThread()
 			}
 			gui.handleEvent(event);
 		}
+
+		tgui::TextBox::Ptr stepCounter = gui.get<tgui::TextBox>("stepCounter");
+		stepCounter->setText(std::to_string(getCurrentStep()));
+
 		printLattice();
 
 		gui.draw();
@@ -96,4 +107,10 @@ void ModelGUI::printLattice()
 {
 	generateField();
 	putAgents();
+}
+
+void ModelGUI::prepareWidgets(tgui::Gui& gui)
+{
+	tgui::Button::Ptr startButton = gui.get<tgui::Button>("startButton");
+	startButton->connect("pressed", [&]() {	toggleSim(); });
 }

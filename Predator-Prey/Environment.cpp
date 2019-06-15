@@ -12,6 +12,7 @@
 Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_):
 	latticeSize(latteSize_),
 	blindAgents(blindAgents_),
+	isSimulationRunning(false),
 	qMap(qMap_),
 	lattice(new Lattice(latticeSize, qMap)),
 	predatorMaxHealth(predMaxHealth_),
@@ -20,30 +21,27 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHea
 	preyMatingProb(0.4),
 	predatorMatingProb(0.2),
     preyMaxHealth(150),
+	currentStep(0),
 	gui(new ModelGUI(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
-		800, 1200, 800))
+		800, 1200, 800, std::bind(&Environment::toggleSimulationRun, this), std::bind(&Environment::getCurrentStep, this)))
 {
-	/*for(int i = 0;i<numberOfIterations;i++)
-	{
-		currentStep++;
-		nextStep();
-		finishTurn();
-	}*/
+	stepLogFileName = std::to_string(latticeSize);
+	std::for_each(qMap.begin(), qMap.end(), [this](auto const& data) {
+		stepLogFileName += "__";
+		stepLogFileName += Utils::AgentTypeToString.at(data.first);
+		stepLogFileName += "_";
+		stepLogFileName += std::to_string(data.second);
+	});
 }
 
 void Environment::makeIterations() {
-	for (int i = 0; i < numberOfIterations; i++)
-	{
-		stepLogFileName = std::to_string(latticeSize);
-		std::for_each(qMap.begin(), qMap.end(), [this](auto const& data) {
-			stepLogFileName += "__";
-			stepLogFileName += Utils::AgentTypeToString.at(data.first);
-			stepLogFileName += "_";
-			stepLogFileName += std::to_string(data.second);
-		});
-		
-		nextStep();
-		finishTurn();
+	while (1) {
+		while (currentStep < numberOfIterations && isSimulationRunning) {
+			currentStep++;
+			nextStep();
+			finishTurn();
+			Logger::getInstance().LogStep(lattice->getAgentStatistics(), stepLogFileName, currentStep);
+		}
 	}
 }
 
@@ -95,6 +93,16 @@ Environment::Position Environment::generateMovePosition(Position position)
 	} while (newCol == position.first && newRow == position.second);
 
 	return Position(newRow, newCol);
+}
+
+int Environment::getCurrentStep()
+{
+	return currentStep;
+}
+
+void Environment::toggleSimulationRun()
+{
+	isSimulationRunning = !isSimulationRunning;
 }
 
 void Environment::blindAgentTurn(Position agentPosition) {
