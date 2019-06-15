@@ -2,6 +2,7 @@
 #include "Interfaces/IAgent.h"
 #include "Lattice.h"
 #include "ModelGUI.h"
+#include "Utilities.h"
 #include <vector>
 #include <string>
 #include <functional>
@@ -16,7 +17,8 @@ public:
 	using AgentType = Enums::AgentType;
 	using QuantityMap = std::map<AgentType, int>;
 
-	Environment(int lattSize_, QuantityMap qMap_, const int predatorMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_ = true);
+	Environment(int lattSize_, QuantityMap qMap_, const int predatorMaxHealth_, const int preyHelthToMate_, 
+		const int numberOfIterations_, bool blindAgents_ = true);
 
 	void nextStep();
 
@@ -65,6 +67,23 @@ public:
 		predatorMaxHealth = data.predatorMaxHealth;
 		customModel = data.customModel;
 	}
+
+	void printParameters() {
+		system("cls");
+		std::cout << "Predator Max HP: " << predatorMaxHealth << "\n";
+		std::cout << "Predator Mating Prob: " << predatorMatingProb << "\n";
+		std::cout << "Prey Max HP: " << preyMaxHealth << "\n";
+		std::cout << "Prey Mating Prob: " << preyMatingProb << "\n";
+		std::cout << "Prey HP to Mate: " << preyHelthToMate << std::endl;
+	}
+
+	void resetEnv();
+
+	QuantityMap getQuants() const { return qMap; }
+	void setQuants(const QuantityMap qMap_) { qMap = qMap_; }
+
+	int getNumberOfIteration() const { return numberOfIterations; }
+	void setNumberOfIterations(int numberOfIterations_) { numberOfIterations = numberOfIterations_; }
 
 
 private:

@@ -20,4 +20,7 @@ public:
 	virtual void killAgent(Position position) = 0;
 	virtual Enums::AgentType checkAgentType(int ID) = 0;
 	virtual QuantityMap getAgentStatistics() = 0;
+
+	virtual void resetLattice() = 0;
+	virtual void updateQuants(QuantityMap qMap_) = 0;
 };

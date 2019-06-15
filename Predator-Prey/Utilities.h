@@ -45,8 +45,8 @@ namespace Utils
 		freeIDs.push(ID);
 	}
 
-	struct envData //deklaracja struktury
-	{ //opis struktury
+	struct envData
+	{
 		double preyMatingProb;
 		double predatorMatingProb;
 		int preyMaxHealth;

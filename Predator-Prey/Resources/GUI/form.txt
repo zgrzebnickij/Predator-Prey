@@ -1,25 +1,20 @@
 Renderer.1 {
+    textcolor = rgb(190, 190, 190);
+    textcolorhover = rgb(250, 250, 250);
+    texture = "Resources/GUI/Themes/Black.png" Part( 0, 64, 45, 50) Middle(10, 0, 25, 50);
+    texturedisabled = None;
+    texturedown = "Resources/GUI/Themes/Black.png" Part(90, 64, 45, 50) Middle(10, 0, 25, 50);
+    texturefocused = "Resources/GUI/Themes/Black.png" Part(135, 64, 45, 50) Middle(10, 0, 25, 50);
+    texturehover = "Resources/GUI/Themes/Black.png" Part(45, 64, 45, 50) Middle(10, 0, 25, 50);
+}
+
+Renderer.2 {
     caretcolor = rgb(110, 110, 255);
     padding = (3, 3, 3, 3);
     selectedtextbackgroundcolor = rgb( 10, 110, 255);
     selectedtextcolor = White;
     textcolor = rgb(190, 190, 190);
     texturebackground = "Resources/GUI/Themes/Black.png" Part(0, 154, 48, 48) Middle(16, 16, 16, 16);
-
-    scrollbar {
-        texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
-        texturearrowdownhover = "Resources/GUI/Themes/Black.png" Part(183, 174, 20, 20) Middle(0, 1, 20, 19);
-        texturearrowup = "Resources/GUI/Themes/Black.png" Part(163, 154, 20, 20) Middle(0, 0, 20, 19);
-        texturearrowuphover = "Resources/GUI/Themes/Black.png" Part(183, 154, 20, 20) Middle(0, 0, 20, 19);
-        texturethumb = "Resources/GUI/Themes/Black.png" Part(143, 154, 20, 20);
-        texturethumbhover = "Resources/GUI/Themes/Black.png" Part(143, 174, 20, 20);
-        texturetrack = "Resources/GUI/Themes/Black.png" Part(123, 154, 20, 20);
-        texturetrackhover = "Resources/GUI/Themes/Black.png" Part(123, 174, 20, 20);
-    }
-}
-
-Renderer.2 {
-    textcolor = rgb(190, 190, 190);
 
     scrollbar {
         texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
@@ -34,6 +29,21 @@ Renderer.2 {
 }
 
 Renderer.3 {
+    textcolor = rgb(190, 190, 190);
+
+    scrollbar {
+        texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowdownhover = "Resources/GUI/Themes/Black.png" Part(183, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowup = "Resources/GUI/Themes/Black.png" Part(163, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturearrowuphover = "Resources/GUI/Themes/Black.png" Part(183, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturethumb = "Resources/GUI/Themes/Black.png" Part(143, 154, 20, 20);
+        texturethumbhover = "Resources/GUI/Themes/Black.png" Part(143, 174, 20, 20);
+        texturetrack = "Resources/GUI/Themes/Black.png" Part(123, 154, 20, 20);
+        texturetrackhover = "Resources/GUI/Themes/Black.png" Part(123, 174, 20, 20);
+    }
+}
+
+Renderer.4 {
     caretcolor = rgb(110, 110, 255);
     padding = (3, 3, 3, 3);
     selectedtextbackgroundcolor = rgb( 10, 110, 255);
@@ -53,7 +63,37 @@ Renderer.3 {
     }
 }
 
-Renderer.4 {
+Renderer.5 {
+    textcolor = rgb(190, 190, 190);
+
+    scrollbar {
+        texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowdownhover = "Resources/GUI/Themes/Black.png" Part(183, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowup = "Resources/GUI/Themes/Black.png" Part(163, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturearrowuphover = "Resources/GUI/Themes/Black.png" Part(183, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturethumb = "Resources/GUI/Themes/Black.png" Part(143, 154, 20, 20);
+        texturethumbhover = "Resources/GUI/Themes/Black.png" Part(143, 174, 20, 20);
+        texturetrack = "Resources/GUI/Themes/Black.png" Part(123, 154, 20, 20);
+        texturetrackhover = "Resources/GUI/Themes/Black.png" Part(123, 174, 20, 20);
+    }
+}
+
+Renderer.6 {
+    textcolor = rgb(190, 190, 190);
+
+    scrollbar {
+        texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowdownhover = "Resources/GUI/Themes/Black.png" Part(183, 174, 20, 20) Middle(0, 1, 20, 19);
+        texturearrowup = "Resources/GUI/Themes/Black.png" Part(163, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturearrowuphover = "Resources/GUI/Themes/Black.png" Part(183, 154, 20, 20) Middle(0, 0, 20, 19);
+        texturethumb = "Resources/GUI/Themes/Black.png" Part(143, 154, 20, 20);
+        texturethumbhover = "Resources/GUI/Themes/Black.png" Part(143, 174, 20, 20);
+        texturetrack = "Resources/GUI/Themes/Black.png" Part(123, 154, 20, 20);
+        texturetrackhover = "Resources/GUI/Themes/Black.png" Part(123, 174, 20, 20);
+    }
+}
+
+Renderer.7 {
     textcolor = rgb(190, 190, 190);
 
     scrollbar {
@@ -69,77 +109,68 @@ Renderer.4 {
 }
 
 Button.startButton {
-    Position = (990, 30);
-    Size = (190, 90);
-    Text = START/STOP;
-    TextSize = 13;
-
-    Renderer {
-        textcolor = rgb(190, 190, 190);
-        textcolorhover = rgb(250, 250, 250);
-        texture = "Resources/GUI/Themes/Black.png" Part( 0, 64, 45, 50) Middle(10, 0, 25, 50);
-        texturedisabled = None;
-        texturedown = "Resources/GUI/Themes/Black.png" Part(90, 64, 45, 50) Middle(10, 0, 25, 50);
-        texturefocused = "Resources/GUI/Themes/Black.png" Part(135, 64, 45, 50) Middle(10, 0, 25, 50);
-        texturehover = "Resources/GUI/Themes/Black.png" Part(45, 64, 45, 50) Middle(10, 0, 25, 50);
-    }
+    Position = (990, 10);
+    Size = (90, 102.105);
+    Text = Start;
+    TextSize = 25;
+    renderer = &1;
 }
 
 TextBox.stepCounter {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (820, 70);
+    Position = (820, 60);
     ReadOnly = true;
     Size = (160, 50);
     Text = 0;
     TextSize = 33;
-    renderer = &1;
+    renderer = &2;
 }
 
 Label.stepCounterLabel {
     HorizontalAlignment = Center;
-    Position = (820, 30);
+    Position = (820, 10);
     ScrollbarPolicy = Never;
     Size = (157.2, 32.5161);
     Text = "Current Step:";
     TextSize = 22;
     VerticalAlignment = Center;
-    renderer = &2;
+    renderer = &3;
 }
 
 Label.PredatorInfo {
     HorizontalAlignment = Center;
-    Position = (820, 140);
+    Position = (820, 120);
     ScrollbarPolicy = Never;
-    Size = (357.2, 51.871);
+    Size = (367.2, 23.3231);
     Text = "Predator Info";
-    TextSize = 40;
+    TextSize = 30;
     VerticalAlignment = Center;
-    renderer = &2;
+    renderer = &3;
 }
 
 Label.predatorMaxHPLabel {
-    Position = (820, 220);
+    Position = (820, 170);
     ScrollbarPolicy = Never;
     Size = (244.2, 24.3047);
     Text = "Predator Max HP:";
     TextSize = 18;
     VerticalAlignment = Center;
-    renderer = &2;
+    renderer = &3;
 }
 
 TextBox.predatorMaxHPBox {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (1080, 205);
+    Position = (1080, 155);
     Size = (98, 52.7431);
     Text = "";
-    TextSize = 35;
-    renderer = &1;
+    TextSize = 33;
+    renderer = &2;
 }
 
 Label.predatorMatingProbLabel {
-    Position = (820, 290);
+    Position = (820, 230);
     ScrollbarPolicy = Never;
     Size = (244.2, 24.3047);
     Text = "Predator Mating Prob.:";
@@ -165,10 +196,10 @@ Label.predatorMatingProbLabel {
 TextBox.predatorMatingProbBox {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (1080, 275);
+    Position = (1080, 215);
     Size = (98, 52.7431);
     Text = "";
-    TextSize = 35;
+    TextSize = 33;
 
     Renderer {
         caretcolor = rgb(110, 110, 255);
@@ -193,85 +224,150 @@ TextBox.predatorMatingProbBox {
 
 Label.PreyInfo {
     HorizontalAlignment = Center;
-    Position = (820, 370);
+    Position = (820, 270);
     ScrollbarPolicy = Never;
     Size = (357.2, 51.871);
     Text = "Prey Info";
-    TextSize = 40;
+    TextSize = 30;
     VerticalAlignment = Center;
-
-    Renderer {
-        textcolor = rgb(190, 190, 190);
-
-        scrollbar {
-            texturearrowdown = "Resources/GUI/Themes/Black.png" Part(163, 174, 20, 20) Middle(0, 1, 20, 19);
-            texturearrowdownhover = "Resources/GUI/Themes/Black.png" Part(183, 174, 20, 20) Middle(0, 1, 20, 19);
-            texturearrowup = "Resources/GUI/Themes/Black.png" Part(163, 154, 20, 20) Middle(0, 0, 20, 19);
-            texturearrowuphover = "Resources/GUI/Themes/Black.png" Part(183, 154, 20, 20) Middle(0, 0, 20, 19);
-            texturethumb = "Resources/GUI/Themes/Black.png" Part(143, 154, 20, 20);
-            texturethumbhover = "Resources/GUI/Themes/Black.png" Part(143, 174, 20, 20);
-            texturetrack = "Resources/GUI/Themes/Black.png" Part(123, 154, 20, 20);
-            texturetrackhover = "Resources/GUI/Themes/Black.png" Part(123, 174, 20, 20);
-        }
-    }
+    renderer = &5;
 }
 
 Label.preyMaxHPLabel {
-    Position = (820, 450);
+    Position = (820, 330);
     ScrollbarPolicy = Never;
     Size = (244.2, 24.3047);
     Text = "Prey Max HP:";
     TextSize = 18;
     VerticalAlignment = Center;
-    renderer = &4;
+    renderer = &6;
 }
 
 TextBox.preyMaxHPBox {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (1080, 435);
+    Position = (1080, 315);
     Size = (98, 52.7431);
     Text = "";
-    TextSize = 35;
-    renderer = &3;
+    TextSize = 33;
+    renderer = &4;
 }
 
 Label.preyMatingProbLabel {
-    Position = (820, 520);
+    Position = (820, 390);
     ScrollbarPolicy = Never;
     Size = (244.2, 24.3047);
     Text = "Prey Mating Prob.:";
     TextSize = 18;
     VerticalAlignment = Center;
-    renderer = &4;
+    renderer = &6;
 }
 
 TextBox.preyMatingProbBox {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (1080, 505);
+    Position = (1080, 375);
     Size = (98, 52.7431);
     Text = "";
-    TextSize = 35;
-    renderer = &3;
+    TextSize = 33;
+    renderer = &4;
 }
 
 Label.preyHPToMateLabel {
-    Position = (820, 590);
+    Position = (820, 450);
     ScrollbarPolicy = Never;
     Size = (244.2, 24.3047);
     Text = "Prey HP to Mate:";
     TextSize = 18;
     VerticalAlignment = Center;
-    renderer = &4;
+    renderer = &6;
 }
 
 TextBox.preyHPToMateBox {
     HorizontalScrollbarPolicy = Never;
     MaximumCharacters = 0;
-    Position = (1080, 575);
+    Position = (1080, 435);
     Size = (98, 52.7431);
     Text = "";
-    TextSize = 35;
+    TextSize = 33;
+    renderer = &4;
+}
+
+Button.resetButton {
+    Position = (1090, 10);
+    Size = (90, 102.105);
+    Text = Reset;
+    TextSize = 25;
+    renderer = &1;
+}
+
+Label.predatorsQuantLabel {
+    Position = (820, 565);
+    ScrollbarPolicy = Never;
+    Size = (257.2, 32.5161);
+    Text = "Predators Quantity:";
+    TextSize = 18;
+    VerticalAlignment = Center;
     renderer = &3;
+}
+
+TextBox.predQuantBox {
+    HorizontalScrollbarPolicy = Never;
+    MaximumCharacters = 0;
+    Position = (1080, 555);
+    Size = (98, 52.7431);
+    Text = "";
+    TextSize = 33;
+    renderer = &4;
+}
+
+Label.preyQuantLabel {
+    Position = (820, 635);
+    ScrollbarPolicy = Never;
+    Size = (257.2, 32.5161);
+    Text = "Prey Quantity";
+    TextSize = 18;
+    VerticalAlignment = Center;
+    renderer = &7;
+}
+
+TextBox.preyQuantBox {
+    HorizontalScrollbarPolicy = Never;
+    MaximumCharacters = 0;
+    Position = (1080, 625);
+    Size = (98, 52.7431);
+    Text = "";
+    TextSize = 33;
+    renderer = &4;
+}
+
+Label.maxStepsLabel {
+    Position = (820, 705);
+    ScrollbarPolicy = Never;
+    Size = (257.2, 32.5161);
+    Text = "Max Steps:";
+    TextSize = 18;
+    VerticalAlignment = Center;
+    renderer = &7;
+}
+
+TextBox.maxStepsBox {
+    HorizontalScrollbarPolicy = Never;
+    MaximumCharacters = 0;
+    Position = (1080, 695);
+    Size = (98, 52.7431);
+    Text = "";
+    TextSize = 33;
+    renderer = &4;
+}
+
+Label.ModelInfo {
+    HorizontalAlignment = Center;
+    Position = (830, 500);
+    ScrollbarPolicy = Never;
+    Size = (357.2, 51.871);
+    Text = "Model Info";
+    TextSize = 30;
+    VerticalAlignment = Center;
+    renderer = &5;
 }

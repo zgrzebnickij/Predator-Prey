@@ -9,7 +9,8 @@
 #include <numeric>
 
 
-Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_):
+Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, 
+	const int numberOfIterations_, bool blindAgents_):
 	latticeSize(latteSize_),
 	isSimulationRunning(false),
 	customModel(blindAgents_),
@@ -23,7 +24,10 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHea
     preyMaxHealth(150),
 	currentStep(0),
 	gui(new ModelGUI(lattice->getLattice(), std::bind(&ILattice::checkAgentType, lattice, std::placeholders::_1),
-		800, 1200, 800, std::bind(&Environment::toggleSimulationRun, this), std::bind(&Environment::getCurrentStep, this)))
+		800, 1200, 800, std::bind(&Environment::toggleSimulationRun, this), std::bind(&Environment::getCurrentStep, this),
+		std::bind(&Environment::getParameters, this), std::bind(&Environment::setParameters, this, std::placeholders::_1),
+		std::bind(&Environment::resetEnv, this), std::bind(&Environment::getQuants, this), std::bind(&Environment::setQuants, this, std::placeholders::_1),
+		std::bind(&Environment::getNumberOfIteration, this), std::bind(&Environment::setNumberOfIterations, this, std::placeholders::_1)))
 {
 	stepLogFileName = std::to_string(latticeSize);
 	std::for_each(qMap.begin(), qMap.end(), [this](auto const& data) {
@@ -37,6 +41,7 @@ Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHea
 void Environment::makeIterations() {
 	while (1) {
 		while (currentStep < numberOfIterations && isSimulationRunning) {
+			//printParameters();
 			currentStep++;
 			nextStep();
 			finishTurn();
@@ -98,6 +103,15 @@ Environment::Position Environment::generateMovePosition(Position position)
 int Environment::getCurrentStep()
 {
 	return currentStep;
+}
+
+void Environment::resetEnv()
+{
+	isSimulationRunning = false;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	lattice->updateQuants(qMap);
+	lattice->resetLattice();
+	currentStep = 0;
 }
 
 void Environment::toggleSimulationRun()

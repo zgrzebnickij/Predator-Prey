@@ -11,7 +11,9 @@ int main() {
 	const int iterations = 100;
 	const int predatorMaxHealth = 3;
 	const int preyHealthToMate = 1;
-	const int sizeOfSystem = 15;
+	int sizeOfSystem = 15;
+	std::cout << "Please enter size of the system: " << std::endl;
+	std::cin >> sizeOfSystem;
 	auto env = Environment(sizeOfSystem, qMap, predatorMaxHealth, preyHealthToMate, iterations, false);
 	env.makeIterations();
 }

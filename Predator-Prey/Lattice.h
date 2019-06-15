@@ -27,6 +27,9 @@ public:
 	Enums::AgentType checkAgentType(int ID) override;
 	QuantityMap getAgentStatistics() override;
 
+	void resetLattice() override;
+	 void updateQuants(QuantityMap qMap_) override;
+
 private:
 	void generateLattice();
 	void spawnAgents();

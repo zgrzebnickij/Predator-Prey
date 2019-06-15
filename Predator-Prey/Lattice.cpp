@@ -12,9 +12,7 @@
 Lattice::Lattice(int latticeSize_, QuantityMap& agentsQuantity_) :
 	latticeSize(latticeSize_),
 	latticeMap(latticeSize_),
-	agentsQuantity(agentsQuantity_),
-	agentsVec(std::accumulate(agentsQuantity.begin(), agentsQuantity.end(), 0, 
-	                       [](int value, const QuantityMap::value_type& p) { return value + p.second; }))
+	agentsQuantity(agentsQuantity_)
 {
 	generateLattice();
 	spawnAgents();
@@ -46,9 +44,9 @@ Agent* Lattice::getAgentInstance(Position position) {
 
 void Lattice::spawnAgent(Position position, int agentID, Enums::AgentType agentType)
 {
-	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	auto agent = factory.createAgent(agentType);
 	changeAgentOnLattice(position, agent->getID());
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	agentsVec.push_back(std::move(agent));
 }
 
@@ -124,8 +122,27 @@ Lattice::QuantityMap Lattice::getAgentStatistics()
 	return statisticMap;
 }
 
+void Lattice::resetLattice()
+{
+	for (int row = 0; row < latticeMap.size(); row++) {
+		for (int col = 0; col < latticeMap.size(); col++) {
+			if (getAgentID(Position(row, col))) {
+				killAgent(Position(row, col));
+			}
+		}
+	}
+
+	spawnAgents();
+}
+
+void Lattice::updateQuants(QuantityMap qMap_)
+{
+	agentsQuantity = qMap_;
+}
+
 void Lattice::generateLattice()
 {
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	std::generate(std::execution::par, latticeMap.begin(), latticeMap.end(), [this]()
 	{
 		std::vector<int> rowVec(latticeSize);
@@ -136,6 +153,11 @@ void Lattice::generateLattice()
 
 void Lattice::spawnAgents()
 {
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
+
+	agentsVec.resize(std::accumulate(agentsQuantity.begin(), agentsQuantity.end(), 0,
+		[](int value, const QuantityMap::value_type& p) { return value + p.second; }));
+
 	auto agentVecIter = agentsVec.begin();
 	std::for_each(agentsQuantity.begin(), agentsQuantity.end(), [this, &agentVecIter](const QuantityMap::value_type& p)
 	{
