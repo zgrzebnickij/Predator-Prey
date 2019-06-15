@@ -46,6 +46,27 @@ public:
 	int getPredatorMaxHealth() { return predatorMaxHealth; }
 	void setPredatorMaxHealth(const int maxHealth) { predatorMaxHealth = maxHealth; }
 
+	Utils::envData getParameters() {
+		Utils::envData parameters = {
+			preyMatingProb,
+			predatorMatingProb,
+			preyMaxHealth,
+			preyHelthToMate,
+			predatorMaxHealth,
+			customModel
+		};
+		return parameters;
+	}
+	void setParameters(Utils::envData data) {
+		preyMatingProb = data.preyMatingProb;
+		predatorMatingProb = data.predatorMatingProb;
+		preyMaxHealth = data.preyMaxHealth;
+		preyHelthToMate = data.preyHelthToMate;
+		predatorMaxHealth = data.predatorMaxHealth;
+		customModel = data.customModel;
+	}
+
+
 private:
 	void toggleSimulationRun();
 
@@ -60,6 +81,7 @@ private:
 	bool blindAgents;
 	bool isSimulationRunning;
 	std::string stepLogFileName;
+	bool customModel;
 	QuantityMap qMap;
 	
 	std::shared_ptr<void(std::pair<int, int>)> agentTurn;

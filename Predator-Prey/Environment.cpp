@@ -11,8 +11,8 @@
 
 Environment::Environment(int latteSize_, QuantityMap qMap_, const int predMaxHealth_, const int preyHelthToMate_, const int numberOfIterations_, bool blindAgents_):
 	latticeSize(latteSize_),
-	blindAgents(blindAgents_),
 	isSimulationRunning(false),
+	customModel(blindAgents_),
 	qMap(qMap_),
 	lattice(new Lattice(latticeSize, qMap)),
 	predatorMaxHealth(predMaxHealth_),
@@ -50,7 +50,7 @@ void Environment::nextStep() {
 		Position position(RandomDevice::getInstance().getRandomPosition(latticeSize));
 
 		if (lattice->getAgentID(position)) {
-			if (blindAgents) {
+			if (customModel) {
 				//this is our version when we need meeting to mate
 				blindAgentTurn(position);
 			}
