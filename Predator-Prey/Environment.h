@@ -30,6 +30,22 @@ public:
 	void makeIterations();
 	Position generateMovePosition(Position position);
 	int getCurrentStep();
+
+	int getPreyMaxHealth() { return preyMaxHealth; }
+	void setPreyMaxHealth(const int maxHealth) {preyMaxHealth = maxHealth;}
+
+	double getPreyMatingProb() { return preyMatingProb; }
+	void setPreyMatingProb(const double matingProb) { preyMatingProb = matingProb; }
+
+	double getPredatorMatingProb() { return predatorMatingProb; }
+	void setPredatorMatingProb(const double matingProb) { predatorMatingProb = matingProb; }
+
+	int getPreyHelthToMate() { return preyHelthToMate; }
+	void setPreyHelthToMate(const int matingAge) { preyHelthToMate = matingAge; }
+
+	int getPredatorMaxHealth() { return predatorMaxHealth; }
+	void setPredatorMaxHealth(const int maxHealth) { predatorMaxHealth = maxHealth; }
+
 private:
 	void toggleSimulationRun();
 
