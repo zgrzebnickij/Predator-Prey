@@ -46,6 +46,7 @@ Agent* Lattice::getAgentInstance(Position position) {
 
 void Lattice::spawnAgent(Position position, int agentID, Enums::AgentType agentType)
 {
+	std::lock_guard<std::mutex> latticeLock(latticeGuard);
 	auto agent = factory.createAgent(agentType);
 	changeAgentOnLattice(position, agent->getID());
 	agentsVec.push_back(std::move(agent));
